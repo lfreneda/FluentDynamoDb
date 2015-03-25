@@ -48,7 +48,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DynamoDbMapperWithComplexClassTests.cs" />
+    <Compile Include="DynamoDbMapperWithComplexClassBase.cs" />
+    <Compile Include="DynamoDbMapperWithComplexClassToDocumentTests.cs" />
+    <Compile Include="DynamoDbMapperWithComplexClassToEntityTests.cs" />
     <Compile Include="DynamoDbMapperWithSimpleClassTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
