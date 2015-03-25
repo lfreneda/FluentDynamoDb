@@ -15,10 +15,10 @@ namespace FluentDynamoDb
 
         public Document ToDocument(TEntity entity)
         {
-            return ToDocumentInt(entity, _configuration.Fields);
+            return ToDocument(entity, _configuration.Fields);
         }
 
-        public Document ToDocumentInt(object entity, IEnumerable<IFieldConfiguration> fields)
+        private Document ToDocument(object entity, IEnumerable<IFieldConfiguration> fields)
         {
             var document = new Document();
 
@@ -27,7 +27,7 @@ namespace FluentDynamoDb
                 if (field.IsComplexType)
                 {
                     var value = entity.GetType().GetProperty(field.PropertyName).GetValue(entity, null);
-                    var innerDocument = ToDocumentInt(value, field.FieldConfigurations);
+                    var innerDocument = ToDocument(value, field.FieldConfigurations);
                     document[field.PropertyName] = innerDocument;
                 }
                 else
