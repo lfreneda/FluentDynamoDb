@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace FluentDynamoDb.Tests
 {
     [TestFixture]
-    public class DynamoDbMapperWithComplexClassToDocumentBase : DynamoDbMapperWithComplexClassBase
+    public class DynamoDbMapperWithComplexIncompleteClassToDocumentTests : DynamoDbMapperWithComplexClassBase
     {
         private Document _documentFoo;
 
@@ -16,11 +16,7 @@ namespace FluentDynamoDb.Tests
                 FooName = "TheFooName",
                 Bar = new Bar
                 {
-                    BarName = "TheBarName",
-                    Other = new Other
-                    {
-                        OtherName = "TheOtherName"
-                    }
+                    BarName = null
                 }
             };
 
@@ -56,32 +52,14 @@ namespace FluentDynamoDb.Tests
         public void ToDocumento_GivenFooComplexClass_InnerDocumentBarBarNameValueShoulBeTheBarName()
         {
             var documentoBar = _documentFoo["Bar"].AsDocument();
-            Assert.AreEqual("TheBarName", documentoBar["BarName"].AsString());
-        }
-
-
-        [Test]
-        public void ToDocument_GivenFooComplexClass_InnerDocumentBarShouldContainsOtherKey()
-        {
-            var documentoBar = _documentFoo["Bar"].AsDocument();
-            Assert.IsTrue(documentoBar.Keys.Contains("Other"));
+            Assert.AreEqual(null, documentoBar["BarName"].AsString());
         }
 
         [Test]
-        public void ToDocument_GivenFooComplexClass_InnerInnerDocumentOtherShouldContainsOtherNameKey()
+        public void ToDocument_GivenFooComplexClass_InnerDocumentBarShouldNotContainsOtherKey()
         {
             var documentoBar = _documentFoo["Bar"].AsDocument();
-            var documentOther = documentoBar["Other"].AsDocument();
-            Assert.IsTrue(documentOther.Keys.Contains("OtherName"));
-        }
-
-
-        [Test]
-        public void ToDocument_GivenFooComplexClass_InnerInnerDocumentOtherOtherNameValueShouldBeTheOtherName()
-        {
-            var documentoBar = _documentFoo["Bar"].AsDocument();
-            var documentOther = documentoBar["Other"].AsDocument();
-            Assert.AreEqual("TheOtherName", documentOther["OtherName"].AsString());
+            Assert.IsFalse(documentoBar.Keys.Contains("Other"));
         }
     }
 }

@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace FluentDynamoDb.Tests
 {
     [TestFixture]
-    public class DynamoDbMapperWithComplexClassToEntityTests : DynamoDbMapperWithComplexClassBase
+    public class DynamoDbMapperWithCompleteComplexClassToEntityTests : DynamoDbMapperWithComplexClassBase
     {
         private Foo _foo;
 

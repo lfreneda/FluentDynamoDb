@@ -27,6 +27,7 @@ namespace FluentDynamoDb
                 if (field.IsComplexType)
                 {
                     var value = entity.GetType().GetProperty(field.PropertyName).GetValue(entity, null);
+                    if (value == null) continue;
                     var innerDocument = ToDocument(value, field.FieldConfigurations);
                     document[field.PropertyName] = innerDocument;
                 }
@@ -56,7 +57,12 @@ namespace FluentDynamoDb
             {
                 if (field.IsComplexType)
                 {
-                    var innerDocument = document[field.PropertyName].AsDocument();
+                    if (!document.ContainsKey(field.PropertyName)) continue;
+
+                    var propertyValue = document[field.PropertyName];
+                    if (propertyValue == null) continue;
+
+                    var innerDocument = propertyValue.AsDocument();
                     var value = ToEntity(innerDocument, field.FieldConfigurations, field.Type);
                     entity.GetType().GetProperty(field.PropertyName).SetValue(entity, value);
                 }
