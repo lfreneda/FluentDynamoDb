@@ -9,8 +9,10 @@ namespace FluentDynamoDb.Tests
         private Document _documentFoo;
 
         [SetUp]
-        public void SetUp()
+        public override void SetUp()
         {
+            base.SetUp();
+
             var complexFooInstance = new Foo
             {
                 FooName = "TheFooName",

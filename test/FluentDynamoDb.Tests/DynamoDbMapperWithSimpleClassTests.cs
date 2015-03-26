@@ -7,14 +7,15 @@ namespace FluentDynamoDb.Tests
     [TestFixture]
     public class DynamoDbMapperWithSimpleClassTests
     {
-        private readonly DynamoDbMapper<Foo> _mapper;
+        private DynamoDbMapper<Foo> _mapper;
 
         public class Foo
         {
             public string Title { get; set; }
         }
 
-        public DynamoDbMapperWithSimpleClassTests()
+        [SetUp]
+        public void SetUp()
         {
             var configuration = new DynamoDbEntityConfiguration
             {

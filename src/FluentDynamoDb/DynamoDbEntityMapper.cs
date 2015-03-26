@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using Amazon.DynamoDBv2.DocumentModel;
 
@@ -26,19 +28,41 @@ namespace FluentDynamoDb
             {
                 if (field.IsComplexType)
                 {
-                    var value = entity.GetType().GetProperty(field.PropertyName).GetValue(entity, null);
+                    var value = GetPropertyValue(entity, field);
                     if (value == null) continue;
+
+                    if (IsEnumerable(field))
+                    {
+                        document[field.PropertyName] = CreateDocumentList(value, field.FieldConfigurations);
+                        continue;
+                    }
+
                     var innerDocument = ToDocument(value, field.FieldConfigurations);
                     document[field.PropertyName] = innerDocument;
                 }
                 else
                 {
-                    dynamic value = entity.GetType().GetProperty(field.PropertyName).GetValue(entity, null);
+                    dynamic value = GetPropertyValue(entity, field);
                     document[field.PropertyName] = value;
                 }
             }
 
             return document;
+        }
+
+        private static object GetPropertyValue(object entity, IFieldConfiguration field)
+        {
+            return entity.GetType().GetProperty(field.PropertyName).GetValue(entity, null);
+        }
+
+        private List<Document> CreateDocumentList(object value, IEnumerable<IFieldConfiguration> configuration)
+        {
+            return (from object item in (IEnumerable)value select ToDocument(item, configuration)).ToList();
+        }
+
+        private static bool IsEnumerable(IFieldConfiguration field)
+        {
+            return field.Type.IsGenericType && field.Type.GetGenericTypeDefinition() == typeof(IEnumerable<>);
         }
 
         public TEntity ToEntity(Document document)
@@ -62,6 +86,25 @@ namespace FluentDynamoDb
                     var propertyValue = document[field.PropertyName];
                     if (propertyValue == null) continue;
 
+                    if (IsEnumerable(field))
+                    {
+                        var itemType = field.Type.GetGenericArguments()[0];
+                        var listType = typeof(List<>);
+                        var constructedListType = listType.MakeGenericType(itemType);
+                        var list = (IList)Activator.CreateInstance(constructedListType);
+
+                        foreach (var dbEntry in propertyValue.AsListOfDocument())
+                        {
+                            var itemDocument = dbEntry.AsDocument();
+                            var itemValue = ToEntity(itemDocument, field.FieldConfigurations, itemType);
+                            list.Add(itemValue);
+                        }
+
+                        entity.GetType().GetProperty(field.PropertyName).SetValue(entity, list);
+
+                        continue;
+                    }
+
                     var innerDocument = propertyValue.AsDocument();
                     var value = ToEntity(innerDocument, field.FieldConfigurations, field.Type);
                     entity.GetType().GetProperty(field.PropertyName).SetValue(entity, value);
@@ -83,7 +126,7 @@ namespace FluentDynamoDb
             { typeof (decimal), value => value.AsDecimal() },
             { typeof (bool), value => value.AsBoolean() },
             { typeof (DateTime), value => value.AsDateTime() },
-            { typeof (List<string>), value => value.AsListOfString() }
+            { typeof (IEnumerable<string>), value => value.AsListOfString() }
         };
     }
 }

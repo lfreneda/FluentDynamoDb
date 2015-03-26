@@ -53,6 +53,9 @@
     <Compile Include="DynamoDbMapperWithComplexCompleteClassToDocumentTests.cs" />
     <Compile Include="DynamoDbMapperWithCompleteComplexClassToEntityTests.cs" />
     <Compile Include="DynamoDbMapperWithIncompleteComplexClassToEntityTests.cs" />
+    <Compile Include="DynamoDbMapperWithObjectListToDocumentTests.cs" />
+    <Compile Include="DynamoDbMapperWithObjectListBase.cs" />
+    <Compile Include="DynamoDbMapperWithObjectListToEntityTests.cs" />
     <Compile Include="DynamoDbMapperWithSimpleClassTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -9,8 +9,10 @@ namespace FluentDynamoDb.Tests
         private Foo _foo;
 
         [SetUp]
-        public void SetUp()
+        public override void SetUp()
         {
+            base.SetUp();
+
             var documentFoo = new Document();
             documentFoo["FooName"] = "TheFooName";
             var documentBar = new Document();
