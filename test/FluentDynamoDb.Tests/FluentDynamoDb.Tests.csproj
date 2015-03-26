@@ -35,6 +35,9 @@
     <Reference Include="AWSSDK">
       <HintPath>..\..\packages\AWSSDK.2.3.27.0\lib\net45\AWSSDK.dll</HintPath>
     </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\..\packages\Moq.4.2.1502.0911\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -48,6 +51,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassMapBoolTests.cs" />
+    <Compile Include="ClassMapDateTimeTests.cs" />
+    <Compile Include="ClassMapDecimalTests.cs" />
+    <Compile Include="ClassMapGuidTests.cs" />
+    <Compile Include="ClassMapIntTests.cs" />
+    <Compile Include="ClassMapStringTests.cs" />
+    <Compile Include="ClassMapBase.cs" />
+    <Compile Include="DynamoDbEntityConfigurationTests.cs" />
     <Compile Include="DynamoDbMapperWithComplexClassBase.cs" />
     <Compile Include="DynamoDbMapperWithComplexIncompleteClassToDocumentTests.cs" />
     <Compile Include="DynamoDbMapperWithComplexCompleteClassToDocumentTests.cs" />

@@ -44,10 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassMap.cs" />
     <Compile Include="DynamoDbConverterEnum.cs" />
     <Compile Include="DynamoDbEntityConfiguration.cs" />
     <Compile Include="DynamoDbEntityMapper.cs" />
     <Compile Include="FieldConfiguration.cs" />
+    <Compile Include="FluentDynamoDbMappingException.cs" />
     <Compile Include="IFieldConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -27,25 +27,31 @@ namespace FluentDynamoDb.Tests
         [SetUp]
         public virtual void SetUp()
         {
-            var configuration = new DynamoDbEntityConfiguration
+            var configuration = new DynamoDbEntityConfiguration();
+
+            configuration.AddFieldConfiguration(new FieldConfiguration { PropertyName = "FooName", Type = typeof(string) });
+
+            configuration.AddFieldConfiguration(new FieldConfiguration
             {
-                Fields = new List<IFieldConfiguration>
-                {
-                    new FieldConfiguration { PropertyName = "FooName", Type = typeof(string) },
-                    new FieldConfiguration { PropertyName = "Bars", Type = typeof(IEnumerable<Bar>), IsComplexType = true, 
-                        FieldConfigurations = new List<FieldConfiguration>
+                PropertyName = "Bars",
+                Type = typeof(IEnumerable<Bar>),
+                IsComplexType = true,
+                FieldConfigurations = new List<FieldConfiguration>
                         {
                             new FieldConfiguration { PropertyName = "BarName", Type = typeof(string) }
                         }
-                    },
-                    new FieldConfiguration { PropertyName = "Other", Type = typeof(Other), IsComplexType = true, 
-                        FieldConfigurations = new List<FieldConfiguration>
+            });
+
+            configuration.AddFieldConfiguration(new FieldConfiguration
+            {
+                PropertyName = "Other",
+                Type = typeof(Other),
+                IsComplexType = true,
+                FieldConfigurations = new List<FieldConfiguration>
                         {
                             new FieldConfiguration { PropertyName = "OtherName", Type = typeof(string) }        
                         }
-                    }
-                }
-            };
+            });
 
             Mapper = new DynamoDbMapper<Foo>(configuration);
         }

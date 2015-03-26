@@ -23,18 +23,14 @@ namespace FluentDynamoDb.Tests
         [SetUp]
         public void SetUp()
         {
-            var configuration = new DynamoDbEntityConfiguration
+            var configuration = new DynamoDbEntityConfiguration();
+            
+            configuration.AddFieldConfiguration(new FieldConfiguration
             {
-                Fields = new List<IFieldConfiguration>
-                {
-                    new FieldConfiguration 
-                    { 
-                        PropertyName = "Gender", 
-                        Type = typeof(Gender), 
-                        PropertyConverter = new DynamoDbConverterEnum<Gender>()
-                    }
-                }
-            };
+                PropertyName = "Gender",
+                Type = typeof(Gender),
+                PropertyConverter = new DynamoDbConverterEnum<Gender>()
+            });
 
             _mapper = new DynamoDbMapper<Foo>(configuration);
         }
