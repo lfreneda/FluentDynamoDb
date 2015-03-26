@@ -6,7 +6,8 @@ using Amazon.DynamoDBv2.DocumentModel;
 
 namespace FluentDynamoDb
 {
-    public class DynamoDbMapper<TEntity> where TEntity : class,new()
+    public class DynamoDbMapper<TEntity>
+        where TEntity : class,new()
     {
         private readonly DynamoDbEntityConfiguration _configuration;
 
@@ -43,6 +44,12 @@ namespace FluentDynamoDb
                 else
                 {
                     dynamic value = GetPropertyValue(entity, field);
+
+                    if (field.PropertyConverter != null)
+                    {
+                        value = field.PropertyConverter.ToEntry(value);
+                    }
+
                     document[field.PropertyName] = value;
                 }
             }
@@ -107,13 +114,30 @@ namespace FluentDynamoDb
                 }
                 else
                 {
-                    dynamic value = MappingType[field.Type](document[field.PropertyName]);
-                    SetPropertyValue(entity, field.PropertyName, value);
+                    if (field.PropertyConverter != null)
+                    {
+                        var value = field.PropertyConverter.FromEntry(document[field.PropertyName]);
+                        SetPropertyValue(entity, field.PropertyName, value);
+                    }
+                    else
+                    {
+                        SetPropertyValue(entity, field.PropertyName, MappingFromType[field.Type](document[field.PropertyName]));
+                    }
                 }
             }
 
             return entity;
         }
+
+        protected Dictionary<Type, Func<DynamoDBEntry, dynamic>> MappingFromType = new Dictionary<Type, Func<DynamoDBEntry, dynamic>>
+        {
+            { typeof (string), value => value.AsString() },
+            { typeof (Guid), value => value.AsGuid() },
+            { typeof (decimal), value => value.AsDecimal() },
+            { typeof (bool), value => value.AsBoolean() },
+            { typeof (DateTime), value => value.AsDateTime() },
+            { typeof (IEnumerable<string>), value => value.AsListOfString() }
+        };
 
         private static void SetPropertyValue(object instance, string propertyName, object value)
         {
@@ -126,15 +150,5 @@ namespace FluentDynamoDb
             var constructedListType = listType.MakeGenericType(itemType);
             return (IList)Activator.CreateInstance(constructedListType);
         }
-
-        protected Dictionary<Type, Func<DynamoDBEntry, dynamic>> MappingType = new Dictionary<Type, Func<DynamoDBEntry, dynamic>>
-        {
-            { typeof (string), value => value.AsString() },
-            { typeof (Guid), value => value.AsGuid() },
-            { typeof (decimal), value => value.AsDecimal() },
-            { typeof (bool), value => value.AsBoolean() },
-            { typeof (DateTime), value => value.AsDateTime() },
-            { typeof (IEnumerable<string>), value => value.AsListOfString() }
-        };
     }
 }

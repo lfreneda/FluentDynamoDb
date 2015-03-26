@@ -52,6 +52,7 @@
     <Compile Include="DynamoDbMapperWithComplexIncompleteClassToDocumentTests.cs" />
     <Compile Include="DynamoDbMapperWithComplexCompleteClassToDocumentTests.cs" />
     <Compile Include="DynamoDbMapperWithCompleteComplexClassToEntityTests.cs" />
+    <Compile Include="DynamoDbMapperWithEnumTests.cs" />
     <Compile Include="DynamoDbMapperWithIncompleteComplexClassToEntityTests.cs" />
     <Compile Include="DynamoDbMapperWithObjectListToDocumentTests.cs" />
     <Compile Include="DynamoDbMapperWithObjectListBase.cs" />
