@@ -23,7 +23,6 @@ namespace FluentDynamoDb
     public class DynamoDbRootEntityConfiguration
     {
         public string TableName { get; set; }
-        public Assembly ClassMapAssembly { get; set; }
         public DynamoDbEntityConfiguration DynamoDbEntityConfiguration { get; set; }
     }
 }

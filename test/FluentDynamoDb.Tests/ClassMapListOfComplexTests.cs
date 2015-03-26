@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -8,11 +9,11 @@ using NUnit.Framework;
 namespace FluentDynamoDb.Tests
 {
     [TestFixture]
-    public class ClassMapComplexTypeTests : ClassMapBase
+    public class ClassMapListOfComplexTests : ClassMapBase
     {
         public class Foo
         {
-            public Bar Bar { get; set; }
+            public IEnumerable<Bar> Bars { get; set; }
         }
 
         public class Bar
@@ -22,7 +23,8 @@ namespace FluentDynamoDb.Tests
 
         public class BarMap : ClassMap<Bar>
         {
-            public BarMap()
+            public BarMap(DynamoDbRootEntityConfiguration dynamoDbRootEntityConfiguration)
+                : base(dynamoDbRootEntityConfiguration)
             {
                 Map(c => c.BarName);
             }
@@ -33,7 +35,7 @@ namespace FluentDynamoDb.Tests
             public FooMap(DynamoDbRootEntityConfiguration dynamoDbRootEntityConfiguration, DynamoDbEntityConfiguration dynamoDbEntityConfiguration)
                 : base(dynamoDbRootEntityConfiguration, dynamoDbEntityConfiguration)
             {
-                References(f => f.Bar);
+                HasMany(f => f.Bars);
             }
         }
 
@@ -48,8 +50,8 @@ namespace FluentDynamoDb.Tests
         [Test]
         public void Map_WhenMappingBarWithIsAComplexType_ShouldCreateAFieldConfigurationAsExpected()
         {
-            Assert.AreEqual("Bar", CurrentFieldConfiguration.PropertyName);
-            Assert.AreEqual(typeof(Bar), CurrentFieldConfiguration.Type);
+            Assert.AreEqual("Bars", CurrentFieldConfiguration.PropertyName);
+            Assert.AreEqual(typeof(IEnumerable<Bar>), CurrentFieldConfiguration.Type);
             Assert.AreEqual(true, CurrentFieldConfiguration.IsComplexType);
             Assert.AreEqual(1, CurrentFieldConfiguration.FieldConfigurations.Count);
             Assert.AreEqual("BarName", CurrentFieldConfiguration.FieldConfigurations.ElementAt(0).PropertyName);

@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassMapBoolTests.cs" />
+    <Compile Include="ClassMapListOfComplexTests.cs" />
     <Compile Include="ClassMapComplexTypeTests.cs" />
     <Compile Include="ClassMapDateTimeTests.cs" />
     <Compile Include="ClassMapDecimalTests.cs" />

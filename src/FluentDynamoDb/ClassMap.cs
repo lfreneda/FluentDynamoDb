@@ -45,34 +45,55 @@ namespace FluentDynamoDb
 
             if (propertyInfo != null)
             {
-                var mappingType = _dynamoDbRootEntityConfiguration.ClassMapAssembly.GetTypes().FirstOrDefault(t => t.IsSubclassOf(typeof(ClassMap<TType>)));
-                if (mappingType == null)
-                {
-                    throw new FluentDynamoDbMappingException(string.Format("Could not find mapping for class of type {0}", propertyInfo.PropertyType));
-                }
-
-                ConstructorInfo ctor = mappingType.GetConstructor(new[] { typeof(DynamoDbRootEntityConfiguration) });
-
-                var mapping = ctor.Invoke(new object[] { _dynamoDbRootEntityConfiguration }) as ClassMap<TType>;
-                if (mapping == null)
-                {
-                    throw new FluentDynamoDbMappingException(string.Format("Could not create mapping for class of type {0}", propertyInfo.PropertyType));
-                }
-
-                var fieldConfiguration = new FieldConfiguration
-                {
-                    PropertyName = propertyInfo.Name,
-                    Type = propertyInfo.PropertyType,
-                    IsComplexType = true,
-                };
-
-                foreach (var innerFieldConfiguration in mapping.GetMappingConfiguration().Fields)
-                {
-                    fieldConfiguration.FieldConfigurations.Add(innerFieldConfiguration);
-                }
-
-                _dynamoDbEntityConfiguration.AddFieldConfiguration(fieldConfiguration);
+                CreateComplexFieldConfiguration<TType>(propertyInfo);
             }
+        }
+
+        protected void HasMany<TType>(Expression<Func<TEntity, IEnumerable<TType>>> propertyExpression)
+        {
+            var propertyInfo = GetPropertyInfo(propertyExpression);
+
+            if (propertyInfo != null)
+            {
+                CreateComplexFieldConfiguration<TType>(propertyInfo);
+            }
+        }
+
+        private void CreateComplexFieldConfiguration<TType>(PropertyInfo propertyInfo)
+        {
+            var mappingType = this.GetType().Assembly.GetTypes().FirstOrDefault(t => t.IsSubclassOf(typeof(ClassMap<TType>)));
+            if (mappingType == null)
+            {
+                throw new FluentDynamoDbMappingException(string.Format("Could not find mapping for class of type {0}",
+                    propertyInfo.PropertyType));
+            }
+
+            var mapping = Activator.CreateInstance(mappingType) as ClassMap<TType>;
+            if (mapping == null)
+            {
+                throw new FluentDynamoDbMappingException(string.Format("Could not create mapping for class of type {0}",
+                    propertyInfo.PropertyType));
+            }
+
+            var fieldConfiguration = new FieldConfiguration
+            {
+                PropertyName = propertyInfo.Name,
+                Type = propertyInfo.PropertyType,
+                IsComplexType = true,
+            };
+
+            foreach (var innerFieldConfiguration in mapping.GetMappingConfiguration().Fields)
+            {
+                fieldConfiguration.FieldConfigurations.Add(innerFieldConfiguration);
+            }
+
+            _dynamoDbEntityConfiguration.AddFieldConfiguration(fieldConfiguration);
+        }
+
+
+        private static bool IsEnumerable(Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>);
         }
 
         private static PropertyInfo GetPropertyInfo<TType>(Expression<Func<TEntity, TType>> propertyExpression)
