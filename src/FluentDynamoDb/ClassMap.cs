@@ -8,25 +8,25 @@ namespace FluentDynamoDb
 {
     public class ClassMap<TEntity>
     {
+        private readonly DynamoDbRootEntityConfiguration _dynamoDbRootEntityConfiguration;
         private readonly DynamoDbEntityConfiguration _dynamoDbEntityConfiguration;
-        private readonly DynamoDbMappingConfiguration _dynamoDbMappingConfiguration;
 
         public ClassMap()
-            : this(new DynamoDbEntityConfiguration(), new DynamoDbMappingConfiguration())
+            : this(new DynamoDbRootEntityConfiguration(), new DynamoDbEntityConfiguration())
         {
 
         }
 
-        public ClassMap(DynamoDbEntityConfiguration dynamoDbEntityConfiguration)
-            : this(dynamoDbEntityConfiguration, new DynamoDbMappingConfiguration())
+        public ClassMap(DynamoDbRootEntityConfiguration dynamoDbRootEntityConfiguration)
+            : this(dynamoDbRootEntityConfiguration, new DynamoDbEntityConfiguration())
         {
 
         }
 
-        internal ClassMap(DynamoDbEntityConfiguration dynamoDbEntityConfiguration, DynamoDbMappingConfiguration dynamoDbMappingConfiguration)
+        internal ClassMap(DynamoDbRootEntityConfiguration dynamoDbRootEntityConfiguration, DynamoDbEntityConfiguration dynamoDbEntityConfiguration)
         {
+            _dynamoDbRootEntityConfiguration = dynamoDbRootEntityConfiguration;
             _dynamoDbEntityConfiguration = dynamoDbEntityConfiguration;
-            _dynamoDbMappingConfiguration = dynamoDbMappingConfiguration;
         }
 
         protected void Map<TType>(Expression<Func<TEntity, TType>> propertyExpression)
@@ -35,7 +35,7 @@ namespace FluentDynamoDb
 
             if (propertyInfo != null)
             {
-                _dynamoDbMappingConfiguration.AddFieldConfiguration(CreateFieldConfigurationWith(propertyInfo));
+                _dynamoDbEntityConfiguration.AddFieldConfiguration(CreateFieldConfigurationWith(propertyInfo));
             }
         }
 
@@ -45,15 +45,15 @@ namespace FluentDynamoDb
 
             if (propertyInfo != null)
             {
-                var mappingType = _dynamoDbEntityConfiguration.ClassMapAssembly.GetTypes().FirstOrDefault(t => t.IsSubclassOf(typeof(ClassMap<TType>)));
+                var mappingType = _dynamoDbRootEntityConfiguration.ClassMapAssembly.GetTypes().FirstOrDefault(t => t.IsSubclassOf(typeof(ClassMap<TType>)));
                 if (mappingType == null)
                 {
                     throw new FluentDynamoDbMappingException(string.Format("Could not find mapping for class of type {0}", propertyInfo.PropertyType));
                 }
 
-                ConstructorInfo ctor = mappingType.GetConstructor(new[] { typeof(DynamoDbEntityConfiguration) });
+                ConstructorInfo ctor = mappingType.GetConstructor(new[] { typeof(DynamoDbRootEntityConfiguration) });
 
-                var mapping = ctor.Invoke(new object[] { _dynamoDbEntityConfiguration }) as ClassMap<TType>;
+                var mapping = ctor.Invoke(new object[] { _dynamoDbRootEntityConfiguration }) as ClassMap<TType>;
                 if (mapping == null)
                 {
                     throw new FluentDynamoDbMappingException(string.Format("Could not create mapping for class of type {0}", propertyInfo.PropertyType));
@@ -71,7 +71,7 @@ namespace FluentDynamoDb
                     fieldConfiguration.FieldConfigurations.Add(innerFieldConfiguration);
                 }
 
-                _dynamoDbMappingConfiguration.AddFieldConfiguration(fieldConfiguration);
+                _dynamoDbEntityConfiguration.AddFieldConfiguration(fieldConfiguration);
             }
         }
 
@@ -100,14 +100,14 @@ namespace FluentDynamoDb
             };
         }
 
-        public DynamoDbMappingConfiguration GetMappingConfiguration()
-        {
-            return _dynamoDbMappingConfiguration;
-        }
-
-        public DynamoDbEntityConfiguration GetConfiguration()
+        public DynamoDbEntityConfiguration GetMappingConfiguration()
         {
             return _dynamoDbEntityConfiguration;
+        }
+
+        public DynamoDbRootEntityConfiguration GetConfiguration()
+        {
+            return _dynamoDbRootEntityConfiguration;
         }
     }
 }

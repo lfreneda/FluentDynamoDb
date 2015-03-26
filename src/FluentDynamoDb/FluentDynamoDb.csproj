@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="ClassMap.cs" />
     <Compile Include="DynamoDbConverterEnum.cs" />
-    <Compile Include="DynamoDbEntityConfiguration.cs" />
+    <Compile Include="DynamoDbRootEntityConfiguration.cs" />
     <Compile Include="DynamoDbEntityMapper.cs" />
     <Compile Include="FieldConfiguration.cs" />
     <Compile Include="FluentDynamoDbMappingException.cs" />

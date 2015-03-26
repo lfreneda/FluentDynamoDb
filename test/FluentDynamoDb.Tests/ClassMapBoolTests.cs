@@ -6,12 +6,25 @@ namespace FluentDynamoDb.Tests
     [TestFixture]
     public class ClassMapBoolTests : ClassMapBase
     {
+        public class Foo
+        {
+            public bool FooBool { get; set; }
+        }
+
+        public class FooMap : ClassMap<Foo>
+        {
+            public FooMap(DynamoDbRootEntityConfiguration dynamoDbRootEntityConfiguration, DynamoDbEntityConfiguration dynamoDbEntityConfiguration)
+                : base(dynamoDbRootEntityConfiguration, dynamoDbEntityConfiguration)
+            {
+                Map(c => c.FooBool);
+            }
+        }
+
         [SetUp]
         public override void SetUp()
         {
             base.SetUp();
-
-            FooMapInstance.Map(foo => foo.FooBool);
+            var fooMap = new FooMap(DynamoDbRootEntityConfiguration, DynamoDbMappingConfigurationFake.Object);
         }
 
         [Test]

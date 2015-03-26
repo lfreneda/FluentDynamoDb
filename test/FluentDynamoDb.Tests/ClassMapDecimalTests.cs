@@ -6,12 +6,25 @@ namespace FluentDynamoDb.Tests
     [TestFixture]
     public class ClassMapDecimalTests : ClassMapBase
     {
+        public class Foo
+        {
+            public decimal FooDecimal { get; set; }
+        }
+
+        public class FooMap : ClassMap<Foo>
+        {
+            public FooMap(DynamoDbRootEntityConfiguration dynamoDbRootEntityConfiguration, DynamoDbEntityConfiguration dynamoDbEntityConfiguration)
+                : base(dynamoDbRootEntityConfiguration, dynamoDbEntityConfiguration)
+            {
+                Map(c => c.FooDecimal);
+            }
+        }
+
         [SetUp]
         public override void SetUp()
         {
             base.SetUp();
-
-            FooMapInstance.Map(foo => foo.FooDecimal);
+            var fooMap = new FooMap(DynamoDbRootEntityConfiguration, DynamoDbMappingConfigurationFake.Object);
         }
 
         [Test]

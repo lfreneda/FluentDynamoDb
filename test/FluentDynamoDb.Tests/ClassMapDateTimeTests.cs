@@ -7,12 +7,25 @@ namespace FluentDynamoDb.Tests
     [TestFixture]
     public class ClassMapDateTimeTests : ClassMapBase
     {
+        public class Foo
+        {
+            public DateTime FooDate { get; set; }
+        }
+
+        public class FooMap : ClassMap<Foo>
+        {
+            public FooMap(DynamoDbRootEntityConfiguration dynamoDbRootEntityConfiguration, DynamoDbEntityConfiguration dynamoDbEntityConfiguration)
+                : base(dynamoDbRootEntityConfiguration, dynamoDbEntityConfiguration)
+            {
+                Map(c => c.FooDate);
+            }
+        }
+
         [SetUp]
         public override void SetUp()
         {
             base.SetUp();
-
-            FooMapInstance.Map(foo => foo.FooDate);
+            var fooMap = new FooMap(DynamoDbRootEntityConfiguration, DynamoDbMappingConfigurationFake.Object);
         }
 
         [Test]

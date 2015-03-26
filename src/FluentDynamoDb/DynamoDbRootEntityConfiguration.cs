@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace FluentDynamoDb
 {
-    public class DynamoDbMappingConfiguration
+    public class DynamoDbEntityConfiguration
     {
         private readonly ICollection<IFieldConfiguration> _fields = new List<IFieldConfiguration>();
         public IEnumerable<IFieldConfiguration> Fields { get { return _fields; } }
@@ -20,9 +20,10 @@ namespace FluentDynamoDb
         }
     }
 
-    public class DynamoDbEntityConfiguration
+    public class DynamoDbRootEntityConfiguration
     {
         public string TableName { get; set; }
         public Assembly ClassMapAssembly { get; set; }
+        public DynamoDbEntityConfiguration DynamoDbEntityConfiguration { get; set; }
     }
 }

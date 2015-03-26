@@ -9,7 +9,7 @@ namespace FluentDynamoDb.Tests
         [Test]
         public void AddFieldConfiguration_GivenANewDynamoDbEntityConfiguration_FieldsCountShouldBe1()
         {
-            var dynamoDbEntityConfiguration = new DynamoDbMappingConfiguration();
+            var dynamoDbEntityConfiguration = new DynamoDbEntityConfiguration();
 
             dynamoDbEntityConfiguration.AddFieldConfiguration(new FieldConfiguration());
 
@@ -19,7 +19,7 @@ namespace FluentDynamoDb.Tests
         [Test]
         public void AddFieldConfiguration_MappingMoreThanOnceTheSameField_ShouldThrowException()
         {
-            var dynamoDbEntityConfiguration = new DynamoDbMappingConfiguration();
+            var dynamoDbEntityConfiguration = new DynamoDbEntityConfiguration();
 
             dynamoDbEntityConfiguration.AddFieldConfiguration(new FieldConfiguration { PropertyName = "FooName" });
 

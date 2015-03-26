@@ -23,7 +23,7 @@ namespace FluentDynamoDb.Tests
         [SetUp]
         public void SetUp()
         {
-            var configuration = new DynamoDbMappingConfiguration();
+            var configuration = new DynamoDbEntityConfiguration();
             
             configuration.AddFieldConfiguration(new FieldConfiguration
             {
