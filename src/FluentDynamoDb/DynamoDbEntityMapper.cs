@@ -34,11 +34,11 @@ namespace FluentDynamoDb
                     if (IsEnumerable(field))
                     {
                         document[field.PropertyName] = CreateDocumentList(value, field.FieldConfigurations);
-                        continue;
                     }
-
-                    var innerDocument = ToDocument(value, field.FieldConfigurations);
-                    document[field.PropertyName] = innerDocument;
+                    else
+                    {
+                        document[field.PropertyName] = ToDocument(value, field.FieldConfigurations);
+                    }
                 }
                 else
                 {
@@ -82,41 +82,49 @@ namespace FluentDynamoDb
                 if (field.IsComplexType)
                 {
                     if (!document.ContainsKey(field.PropertyName)) continue;
-
-                    var propertyValue = document[field.PropertyName];
-                    if (propertyValue == null) continue;
+                    var dbEntry = document[field.PropertyName];
+                    if (dbEntry == null) continue;
 
                     if (IsEnumerable(field))
                     {
                         var itemType = field.Type.GetGenericArguments()[0];
-                        var listType = typeof(List<>);
-                        var constructedListType = listType.MakeGenericType(itemType);
-                        var list = (IList)Activator.CreateInstance(constructedListType);
+                        var list = CreateListOf(itemType);
 
-                        foreach (var dbEntry in propertyValue.AsListOfDocument())
+                        foreach (var dbEntryItem in dbEntry.AsListOfDocument())
                         {
-                            var itemDocument = dbEntry.AsDocument();
+                            var itemDocument = dbEntryItem.AsDocument();
                             var itemValue = ToEntity(itemDocument, field.FieldConfigurations, itemType);
                             list.Add(itemValue);
                         }
 
-                        entity.GetType().GetProperty(field.PropertyName).SetValue(entity, list);
-
-                        continue;
+                        SetPropertyValue(entity, field.PropertyName, list);
                     }
-
-                    var innerDocument = propertyValue.AsDocument();
-                    var value = ToEntity(innerDocument, field.FieldConfigurations, field.Type);
-                    entity.GetType().GetProperty(field.PropertyName).SetValue(entity, value);
+                    else
+                    {
+                        var value = ToEntity(dbEntry.AsDocument(), field.FieldConfigurations, field.Type);
+                        SetPropertyValue(entity, field.PropertyName, value);
+                    }
                 }
                 else
                 {
                     dynamic value = MappingType[field.Type](document[field.PropertyName]);
-                    entity.GetType().GetProperty(field.PropertyName).SetValue(entity, value);
+                    SetPropertyValue(entity, field.PropertyName, value);
                 }
             }
 
             return entity;
+        }
+
+        private static void SetPropertyValue(object instance, string propertyName, object value)
+        {
+            instance.GetType().GetProperty(propertyName).SetValue(instance, value);
+        }
+
+        private static IList CreateListOf(Type itemType)
+        {
+            var listType = typeof(List<>);
+            var constructedListType = listType.MakeGenericType(itemType);
+            return (IList)Activator.CreateInstance(constructedListType);
         }
 
         protected Dictionary<Type, Func<DynamoDBEntry, dynamic>> MappingType = new Dictionary<Type, Func<DynamoDBEntry, dynamic>>
