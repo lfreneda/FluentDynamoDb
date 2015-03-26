@@ -52,13 +52,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassMapBoolTests.cs" />
+    <Compile Include="ClassMapComplexTypeTests.cs" />
     <Compile Include="ClassMapDateTimeTests.cs" />
     <Compile Include="ClassMapDecimalTests.cs" />
     <Compile Include="ClassMapGuidTests.cs" />
     <Compile Include="ClassMapIntTests.cs" />
     <Compile Include="ClassMapStringTests.cs" />
     <Compile Include="ClassMapBase.cs" />
-    <Compile Include="DynamoDbEntityConfigurationTests.cs" />
+    <Compile Include="DynamoDbMappingConfigurationTests.cs" />
     <Compile Include="DynamoDbMapperWithComplexClassBase.cs" />
     <Compile Include="DynamoDbMapperWithComplexIncompleteClassToDocumentTests.cs" />
     <Compile Include="DynamoDbMapperWithComplexCompleteClassToDocumentTests.cs" />

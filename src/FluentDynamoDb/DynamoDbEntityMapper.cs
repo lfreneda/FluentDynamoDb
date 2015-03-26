@@ -9,9 +9,9 @@ namespace FluentDynamoDb
     public class DynamoDbMapper<TEntity>
         where TEntity : class,new()
     {
-        private readonly DynamoDbEntityConfiguration _configuration;
+        private readonly DynamoDbMappingConfiguration _configuration;
 
-        public DynamoDbMapper(DynamoDbEntityConfiguration configuration)
+        public DynamoDbMapper(DynamoDbMappingConfiguration configuration)
         {
             _configuration = configuration;
         }

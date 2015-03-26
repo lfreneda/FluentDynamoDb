@@ -15,13 +15,13 @@ namespace FluentDynamoDb.Tests
         }
 
         [Test]
-        public void Map_WhenMappingFooName_AddFieldConfigurationShouldBeCalled()
+        public void Map_WhenMappingFooBool_AddFieldConfigurationShouldBeCalled()
         {
-            DynamoDbEntityConfigurationFake.Verify(c => c.AddFieldConfiguration(It.IsAny<IFieldConfiguration>()), Times.Once);
+            DynamoDbMappingConfigurationFake.Verify(c => c.AddFieldConfiguration(It.IsAny<IFieldConfiguration>()), Times.Once);
         }
 
         [Test]
-        public void Map_WhenMappingFooNameWithIsABoolean_ShouldCreateAFieldConfigurationAsExpected()
+        public void Map_WhenMappingFooBoolWithIsABoolean_ShouldCreateAFieldConfigurationAsExpected()
         {
             Assert.AreEqual("FooBool", CurrentFieldConfiguration.PropertyName);
             Assert.AreEqual(typeof(bool), CurrentFieldConfiguration.Type);

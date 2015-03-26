@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace FluentDynamoDb
 {
-    public class DynamoDbEntityConfiguration
+    public class DynamoDbMappingConfiguration
     {
-        public string TableName { get; set; }
-
         private readonly ICollection<IFieldConfiguration> _fields = new List<IFieldConfiguration>();
         public IEnumerable<IFieldConfiguration> Fields { get { return _fields; } }
 
@@ -19,5 +18,11 @@ namespace FluentDynamoDb
 
             _fields.Add(fieldConfiguration);
         }
+    }
+
+    public class DynamoDbEntityConfiguration
+    {
+        public string TableName { get; set; }
+        public Assembly ClassMapAssembly { get; set; }
     }
 }

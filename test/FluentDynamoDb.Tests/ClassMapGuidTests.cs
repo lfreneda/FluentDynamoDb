@@ -16,13 +16,13 @@ namespace FluentDynamoDb.Tests
         }
 
         [Test]
-        public void Map_WhenMappingFooName_AddFieldConfigurationShouldBeCalled()
+        public void Map_WhenMappingFooGuid_AddFieldConfigurationShouldBeCalled()
         {
-            DynamoDbEntityConfigurationFake.Verify(c => c.AddFieldConfiguration(It.IsAny<IFieldConfiguration>()), Times.Once);
+            DynamoDbMappingConfigurationFake.Verify(c => c.AddFieldConfiguration(It.IsAny<IFieldConfiguration>()), Times.Once);
         }
 
         [Test]
-        public void Map_WhenMappingFooNameWithIsAGuid_ShouldCreateAFieldConfigurationAsExpected()
+        public void Map_WhenMappingFooGuidWithIsAGuid_ShouldCreateAFieldConfigurationAsExpected()
         {
             Assert.AreEqual("FooGuid", CurrentFieldConfiguration.PropertyName);
             Assert.AreEqual(typeof(Guid), CurrentFieldConfiguration.Type);

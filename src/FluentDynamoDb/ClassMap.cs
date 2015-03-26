@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -7,19 +9,73 @@ namespace FluentDynamoDb
     public class ClassMap<TEntity>
     {
         private readonly DynamoDbEntityConfiguration _dynamoDbEntityConfiguration;
+        private readonly DynamoDbMappingConfiguration _dynamoDbMappingConfiguration;
 
         public ClassMap()
-            : this(new DynamoDbEntityConfiguration())
+            : this(new DynamoDbEntityConfiguration(), new DynamoDbMappingConfiguration())
         {
 
         }
 
-        internal ClassMap(DynamoDbEntityConfiguration dynamoDbEntityConfiguration)
+        public ClassMap(DynamoDbEntityConfiguration dynamoDbEntityConfiguration)
+            : this(dynamoDbEntityConfiguration, new DynamoDbMappingConfiguration())
+        {
+
+        }
+
+        internal ClassMap(DynamoDbEntityConfiguration dynamoDbEntityConfiguration, DynamoDbMappingConfiguration dynamoDbMappingConfiguration)
         {
             _dynamoDbEntityConfiguration = dynamoDbEntityConfiguration;
+            _dynamoDbMappingConfiguration = dynamoDbMappingConfiguration;
         }
 
-        protected void Map(Expression<Func<TEntity, object>> propertyExpression)
+        protected void Map<TType>(Expression<Func<TEntity, TType>> propertyExpression)
+        {
+            var propertyInfo = GetPropertyInfo(propertyExpression);
+
+            if (propertyInfo != null)
+            {
+                _dynamoDbMappingConfiguration.AddFieldConfiguration(CreateFieldConfigurationWith(propertyInfo));
+            }
+        }
+
+        protected void References<TType>(Expression<Func<TEntity, TType>> propertyExpression)
+        {
+            var propertyInfo = GetPropertyInfo(propertyExpression);
+
+            if (propertyInfo != null)
+            {
+                var mappingType = _dynamoDbEntityConfiguration.ClassMapAssembly.GetTypes().FirstOrDefault(t => t.IsSubclassOf(typeof(ClassMap<TType>)));
+                if (mappingType == null)
+                {
+                    throw new FluentDynamoDbMappingException(string.Format("Could not find mapping for class of type {0}", propertyInfo.PropertyType));
+                }
+
+                ConstructorInfo ctor = mappingType.GetConstructor(new[] { typeof(DynamoDbEntityConfiguration) });
+
+                var mapping = ctor.Invoke(new object[] { _dynamoDbEntityConfiguration }) as ClassMap<TType>;
+                if (mapping == null)
+                {
+                    throw new FluentDynamoDbMappingException(string.Format("Could not create mapping for class of type {0}", propertyInfo.PropertyType));
+                }
+
+                var fieldConfiguration = new FieldConfiguration
+                {
+                    PropertyName = propertyInfo.Name,
+                    Type = propertyInfo.PropertyType,
+                    IsComplexType = true,
+                };
+
+                foreach (var innerFieldConfiguration in mapping.GetMappingConfiguration().Fields)
+                {
+                    fieldConfiguration.FieldConfigurations.Add(innerFieldConfiguration);
+                }
+
+                _dynamoDbMappingConfiguration.AddFieldConfiguration(fieldConfiguration);
+            }
+        }
+
+        private static PropertyInfo GetPropertyInfo<TType>(Expression<Func<TEntity, TType>> propertyExpression)
         {
             MemberExpression memberExpression = null;
 
@@ -32,20 +88,21 @@ namespace FluentDynamoDb
                 throw new ArgumentNullException("propertyExpression", "Not a member access!");
 
             var propertyInfo = (memberExpression.Member as PropertyInfo);
-            if (propertyInfo != null)
-            {
-                var fieldConfiguration = CreateFieldWith(propertyInfo);
-                _dynamoDbEntityConfiguration.AddFieldConfiguration(fieldConfiguration);
-            }
+            return propertyInfo;
         }
 
-        private static IFieldConfiguration CreateFieldWith(PropertyInfo propertyInfo)
+        private static IFieldConfiguration CreateFieldConfigurationWith(PropertyInfo propertyInfo)
         {
             return new FieldConfiguration
             {
                 PropertyName = propertyInfo.Name,
                 Type = propertyInfo.PropertyType
             };
+        }
+
+        public DynamoDbMappingConfiguration GetMappingConfiguration()
+        {
+            return _dynamoDbMappingConfiguration;
         }
 
         public DynamoDbEntityConfiguration GetConfiguration()

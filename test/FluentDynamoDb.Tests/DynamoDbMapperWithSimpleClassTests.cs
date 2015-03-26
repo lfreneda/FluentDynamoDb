@@ -17,7 +17,7 @@ namespace FluentDynamoDb.Tests
         [SetUp]
         public void SetUp()
         {
-            var configuration = new DynamoDbEntityConfiguration();
+            var configuration = new DynamoDbMappingConfiguration();
             configuration.AddFieldConfiguration(new FieldConfiguration { PropertyName = "Title", Type = typeof(string) });
 
             _mapper = new DynamoDbMapper<Foo>(configuration);

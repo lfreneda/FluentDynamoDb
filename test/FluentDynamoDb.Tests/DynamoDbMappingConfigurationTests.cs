@@ -4,12 +4,12 @@ using NUnit.Framework;
 namespace FluentDynamoDb.Tests
 {
     [TestFixture]
-    public class DynamoDbEntityConfigurationTests
+    public class DynamoDbMappingConfigurationTests
     {
         [Test]
         public void AddFieldConfiguration_GivenANewDynamoDbEntityConfiguration_FieldsCountShouldBe1()
         {
-            var dynamoDbEntityConfiguration = new DynamoDbEntityConfiguration();
+            var dynamoDbEntityConfiguration = new DynamoDbMappingConfiguration();
 
             dynamoDbEntityConfiguration.AddFieldConfiguration(new FieldConfiguration());
 
@@ -19,7 +19,7 @@ namespace FluentDynamoDb.Tests
         [Test]
         public void AddFieldConfiguration_MappingMoreThanOnceTheSameField_ShouldThrowException()
         {
-            var dynamoDbEntityConfiguration = new DynamoDbEntityConfiguration();
+            var dynamoDbEntityConfiguration = new DynamoDbMappingConfiguration();
 
             dynamoDbEntityConfiguration.AddFieldConfiguration(new FieldConfiguration { PropertyName = "FooName" });
 

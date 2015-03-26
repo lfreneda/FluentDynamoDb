@@ -16,13 +16,13 @@ namespace FluentDynamoDb.Tests
         }
 
         [Test]
-        public void Map_WhenMappingFooName_AddFieldConfigurationShouldBeCalled()
+        public void Map_WhenMappingFooDate_AddFieldConfigurationShouldBeCalled()
         {
-            DynamoDbEntityConfigurationFake.Verify(c => c.AddFieldConfiguration(It.IsAny<IFieldConfiguration>()), Times.Once);
+            DynamoDbMappingConfigurationFake.Verify(c => c.AddFieldConfiguration(It.IsAny<IFieldConfiguration>()), Times.Once);
         }
 
         [Test]
-        public void Map_WhenMappingFooNameWithIsADateTime_ShouldCreateAFieldConfigurationAsExpected()
+        public void Map_WhenMappingFooDateWithIsADateTime_ShouldCreateAFieldConfigurationAsExpected()
         {
             Assert.AreEqual("FooDate", CurrentFieldConfiguration.PropertyName);
             Assert.AreEqual(typeof(DateTime), CurrentFieldConfiguration.Type);

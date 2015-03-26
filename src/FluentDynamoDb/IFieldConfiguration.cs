@@ -9,7 +9,7 @@ namespace FluentDynamoDb
         Type Type { get; }
         string PropertyName { get; }
         bool IsComplexType { get; }
-        ICollection<FieldConfiguration> FieldConfigurations { get; }
+        ICollection<IFieldConfiguration> FieldConfigurations { get; }
         IPropertyConverter PropertyConverter { get; }
     }
 }

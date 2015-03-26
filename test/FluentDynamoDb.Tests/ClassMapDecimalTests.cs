@@ -17,11 +17,11 @@ namespace FluentDynamoDb.Tests
         [Test]
         public void Map_WhenMappingFooName_AddFieldConfigurationShouldBeCalled()
         {
-            DynamoDbEntityConfigurationFake.Verify(c => c.AddFieldConfiguration(It.IsAny<IFieldConfiguration>()), Times.Once);
+            DynamoDbMappingConfigurationFake.Verify(c => c.AddFieldConfiguration(It.IsAny<IFieldConfiguration>()), Times.Once);
         }
 
         [Test]
-        public void Map_WhenMappingFooNameWithIsADecimal_ShouldCreateAFieldConfigurationAsExpected()
+        public void Map_WhenMappingFooDecimalWithIsADecimal_ShouldCreateAFieldConfigurationAsExpected()
         {
             Assert.AreEqual("FooDecimal", CurrentFieldConfiguration.PropertyName);
             Assert.AreEqual(typeof(decimal), CurrentFieldConfiguration.Type);
