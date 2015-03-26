@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Reflection;
-using Moq;
-using NUnit.Framework;
+﻿using Moq;
 
 namespace FluentDynamoDb.Tests
 {

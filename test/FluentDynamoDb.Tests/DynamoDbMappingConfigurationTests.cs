@@ -11,7 +11,7 @@ namespace FluentDynamoDb.Tests
         {
             var dynamoDbEntityConfiguration = new DynamoDbEntityConfiguration();
 
-            dynamoDbEntityConfiguration.AddFieldConfiguration(new FieldConfiguration());
+            dynamoDbEntityConfiguration.AddFieldConfiguration(new FieldConfiguration("Name", "".GetType()));
 
             Assert.AreEqual(1, dynamoDbEntityConfiguration.Fields.Count());
         }
@@ -21,9 +21,9 @@ namespace FluentDynamoDb.Tests
         {
             var dynamoDbEntityConfiguration = new DynamoDbEntityConfiguration();
 
-            dynamoDbEntityConfiguration.AddFieldConfiguration(new FieldConfiguration { PropertyName = "FooName" });
+            dynamoDbEntityConfiguration.AddFieldConfiguration(new FieldConfiguration("FooName", typeof(string)));
 
-            Assert.That(() => dynamoDbEntityConfiguration.AddFieldConfiguration(new FieldConfiguration { PropertyName = "FooName" }),
+            Assert.That(() => dynamoDbEntityConfiguration.AddFieldConfiguration(new FieldConfiguration("FooName", typeof(string))),
                 Throws.Exception.TypeOf<FluentDynamoDbMappingException>()
                     .With
                     .Message

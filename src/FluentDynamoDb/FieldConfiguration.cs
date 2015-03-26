@@ -6,9 +6,15 @@ namespace FluentDynamoDb
 {
     public class FieldConfiguration : IFieldConfiguration
     {
-        public FieldConfiguration()
+        public FieldConfiguration(string propertyName, Type type, bool isComplexType = false,
+            ICollection<IFieldConfiguration> fieldConfigurations = null,
+            IPropertyConverter propertyConverter = null)
         {
-            FieldConfigurations = new List<IFieldConfiguration>();
+            Type = type;
+            PropertyName = propertyName;
+            IsComplexType = isComplexType;
+            FieldConfigurations = fieldConfigurations ?? new List<IFieldConfiguration>();
+            PropertyConverter = propertyConverter;
         }
 
         public Type Type { get; set; }

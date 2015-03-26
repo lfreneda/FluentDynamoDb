@@ -64,36 +64,23 @@ namespace FluentDynamoDb
             var mappingType = this.GetType().Assembly.GetTypes().FirstOrDefault(t => t.IsSubclassOf(typeof(ClassMap<TType>)));
             if (mappingType == null)
             {
-                throw new FluentDynamoDbMappingException(string.Format("Could not find mapping for class of type {0}",
-                    propertyInfo.PropertyType));
+                throw new FluentDynamoDbMappingException(string.Format("Could not find mapping for class of type {0}", propertyInfo.PropertyType));
             }
 
             var mapping = Activator.CreateInstance(mappingType) as ClassMap<TType>;
             if (mapping == null)
             {
-                throw new FluentDynamoDbMappingException(string.Format("Could not create mapping for class of type {0}",
-                    propertyInfo.PropertyType));
+                throw new FluentDynamoDbMappingException(string.Format("Could not create mapping for class of type {0}", propertyInfo.PropertyType));
             }
 
-            var fieldConfiguration = new FieldConfiguration
-            {
-                PropertyName = propertyInfo.Name,
-                Type = propertyInfo.PropertyType,
-                IsComplexType = true,
-            };
+            var fieldConfiguration = new FieldConfiguration(propertyInfo.Name, propertyInfo.PropertyType, true);
 
-            foreach (var innerFieldConfiguration in mapping.GetMappingConfiguration().Fields)
+            foreach (var innerFieldConfiguration in mapping.GetMappingConfigurationFields())
             {
                 fieldConfiguration.FieldConfigurations.Add(innerFieldConfiguration);
             }
 
             _dynamoDbEntityConfiguration.AddFieldConfiguration(fieldConfiguration);
-        }
-
-
-        private static bool IsEnumerable(Type type)
-        {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>);
         }
 
         private static PropertyInfo GetPropertyInfo<TType>(Expression<Func<TEntity, TType>> propertyExpression)
@@ -114,16 +101,12 @@ namespace FluentDynamoDb
 
         private static IFieldConfiguration CreateFieldConfigurationWith(PropertyInfo propertyInfo)
         {
-            return new FieldConfiguration
-            {
-                PropertyName = propertyInfo.Name,
-                Type = propertyInfo.PropertyType
-            };
+            return new FieldConfiguration(propertyInfo.Name, propertyInfo.PropertyType);
         }
 
-        public DynamoDbEntityConfiguration GetMappingConfiguration()
+        public IEnumerable<IFieldConfiguration> GetMappingConfigurationFields()
         {
-            return _dynamoDbEntityConfiguration;
+            return _dynamoDbEntityConfiguration.Fields;
         }
 
         public DynamoDbRootEntityConfiguration GetConfiguration()

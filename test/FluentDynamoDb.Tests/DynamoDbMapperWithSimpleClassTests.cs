@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Amazon.DynamoDBv2.DocumentModel;
+﻿using Amazon.DynamoDBv2.DocumentModel;
 using NUnit.Framework;
 
 namespace FluentDynamoDb.Tests
@@ -18,7 +17,7 @@ namespace FluentDynamoDb.Tests
         public void SetUp()
         {
             var configuration = new DynamoDbEntityConfiguration();
-            configuration.AddFieldConfiguration(new FieldConfiguration { PropertyName = "Title", Type = typeof(string) });
+            configuration.AddFieldConfiguration(new FieldConfiguration("Title", typeof(string)));
 
             _mapper = new DynamoDbMapper<Foo>(configuration);
         }

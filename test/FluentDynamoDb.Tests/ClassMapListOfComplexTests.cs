@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using Moq;
 using NUnit.Framework;
 
 namespace FluentDynamoDb.Tests
@@ -23,8 +19,7 @@ namespace FluentDynamoDb.Tests
 
         public class BarMap : ClassMap<Bar>
         {
-            public BarMap(DynamoDbRootEntityConfiguration dynamoDbRootEntityConfiguration)
-                : base(dynamoDbRootEntityConfiguration)
+            public BarMap()
             {
                 Map(c => c.BarName);
             }
@@ -48,7 +43,7 @@ namespace FluentDynamoDb.Tests
         }
 
         [Test]
-        public void Map_WhenMappingBarWithIsAComplexType_ShouldCreateAFieldConfigurationAsExpected()
+        public void Map_WhenMappingBarsWithIsAListOfComplexType_ShouldCreateAFieldConfigurationAsExpected()
         {
             Assert.AreEqual("Bars", CurrentFieldConfiguration.PropertyName);
             Assert.AreEqual(typeof(IEnumerable<Bar>), CurrentFieldConfiguration.Type);
