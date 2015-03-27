@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("FluentDynamoDb")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Fluent, POCO friendly, convention-based mappings for DynamoDb. Get your fluent on :-)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("FluentDynamoDb")]

@@ -1,0 +1,1 @@
+..\.nuget\NuGet.exe pack ..\src\FluentDynamoDb\FluentDynamoDb.csproj -Prop Configuration=Release

@@ -61,6 +61,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="FluentDynamoDb.nuspec" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

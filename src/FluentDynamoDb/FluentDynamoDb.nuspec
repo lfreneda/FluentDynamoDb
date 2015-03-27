@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>lfreneda</authors>
+    <owners>lfreneda</owners>
+    <licenseUrl>https://raw.githubusercontent.com/lfreneda/FluentDynamoDb/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/lfreneda/FluentDynamoDb</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>
+      First implementations
+    </releaseNotes>
+    <copyright>Copyright 2015</copyright>
+    <tags>dynamodb aws store mapping document map poco fluent</tags>
+    <dependencies>
+      <dependency id="AWSSDK" version="2.3.27.0" />
+    </dependencies>
+  </metadata>
+</package>
