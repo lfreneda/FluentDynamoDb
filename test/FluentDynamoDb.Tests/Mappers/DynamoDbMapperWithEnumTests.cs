@@ -1,41 +1,36 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
 using FluentDynamoDb.Converters;
-using FluentDynamoDb.Mapping;
-using FluentDynamoDb.Mapping.Configuration;
+using FluentDynamoDb.Mappers;
 using NUnit.Framework;
 
-namespace FluentDynamoDb.Tests.Mapping
+namespace FluentDynamoDb.Tests.Mappers
 {
     [TestFixture]
     public class DynamoDbMappeirWithEnumTests
     {
-        private DynamoDbMapper<Foo> _mapper;
-
         public enum Gender
         {
             Male = 1,
             Female = 2
         }
 
-        public class Foo
-        {
-            public Gender Gender { get; set; }
-        }
+        private DynamoDbMapper<Foo> _mapper;
 
         [SetUp]
         public void SetUp()
         {
             var configuration = new DynamoDbEntityConfiguration();
 
-            configuration.AddFieldConfiguration(new FieldConfiguration("Gender", typeof (Gender), propertyConverter: new DynamoDbConverterEnum<Gender>()));
-           
+            configuration.AddFieldConfiguration(new FieldConfiguration("Gender", typeof (Gender),
+                propertyConverter: new DynamoDbConverterEnum<Gender>()));
+
             _mapper = new DynamoDbMapper<Foo>(configuration);
         }
 
         [Test]
         public void ToDocument_GivenFooClass_ShouldConvertToDocument()
         {
-            var document = _mapper.ToDocument(new Foo { Gender = Gender.Male });
+            var document = _mapper.ToDocument(new Foo {Gender = Gender.Male});
 
             Assert.IsTrue(document.Keys.Contains("Gender"));
             Assert.AreEqual("Male", document["Gender"].AsString());
@@ -49,6 +44,11 @@ namespace FluentDynamoDb.Tests.Mapping
 
             var foo = _mapper.ToEntity(document);
             Assert.AreEqual(Gender.Male, foo.Gender);
+        }
+
+        public class Foo
+        {
+            public Gender Gender { get; set; }
         }
     }
 }

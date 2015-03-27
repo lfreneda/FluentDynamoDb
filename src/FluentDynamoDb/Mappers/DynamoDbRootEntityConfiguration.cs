@@ -1,4 +1,4 @@
-﻿namespace FluentDynamoDb.Mapping.Configuration
+﻿namespace FluentDynamoDb.Mappers
 {
     public class DynamoDbRootEntityConfiguration
     {

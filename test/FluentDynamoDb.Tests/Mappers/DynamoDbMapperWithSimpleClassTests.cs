@@ -1,26 +1,20 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
-using FluentDynamoDb.Mapping;
-using FluentDynamoDb.Mapping.Configuration;
+using FluentDynamoDb.Mappers;
 using NUnit.Framework;
 
-namespace FluentDynamoDb.Tests.Mapping
+namespace FluentDynamoDb.Tests.Mappers
 {
     [TestFixture]
     public class DynamoDbMapperWithSimpleClassTests
     {
         private DynamoDbMapper<Foo> _mapper;
 
-        public class Foo
-        {
-            public string Title { get; set; }
-        }
-
         [SetUp]
         public void SetUp()
         {
             var configuration = new DynamoDbEntityConfiguration();
 
-            configuration.AddFieldConfiguration(new FieldConfiguration("Title", typeof(string)));
+            configuration.AddFieldConfiguration(new FieldConfiguration("Title", typeof (string)));
 
             _mapper = new DynamoDbMapper<Foo>(configuration);
         }
@@ -28,7 +22,7 @@ namespace FluentDynamoDb.Tests.Mapping
         [Test]
         public void ToDocument_GivenFooClass_ShouldConvertToDocument()
         {
-            var document = _mapper.ToDocument(new Foo { Title = "Some title..." });
+            var document = _mapper.ToDocument(new Foo {Title = "Some title..."});
 
             Assert.IsTrue(document.Keys.Contains("Title"));
             Assert.AreEqual("Some title...", document["Title"].AsString());
@@ -42,6 +36,11 @@ namespace FluentDynamoDb.Tests.Mapping
 
             var foo = _mapper.ToEntity(document);
             Assert.AreEqual("Some title...", foo.Title);
+        }
+
+        public class Foo
+        {
+            public string Title { get; set; }
         }
     }
 }

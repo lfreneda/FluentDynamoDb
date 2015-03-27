@@ -18,7 +18,7 @@ namespace FluentDynamoDb.Converters
         {
             if (entry == null) return null;
             var valueString = entry.AsString();
-            return (TEnum)Enum.Parse(typeof(TEnum), valueString);
+            return (TEnum) Enum.Parse(typeof (TEnum), valueString);
         }
     }
 }

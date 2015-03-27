@@ -3,14 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Amazon.DynamoDBv2.DocumentModel;
-using FluentDynamoDb.Mapping.Configuration;
 
-namespace FluentDynamoDb.Mapping
+namespace FluentDynamoDb.Mappers
 {
     public class DynamoDbMapper<TEntity>
-        where TEntity : class,new()
+        where TEntity : class, new()
     {
         private readonly DynamoDbEntityConfiguration _configuration;
+
+        protected Dictionary<Type, Func<DynamoDBEntry, dynamic>> MappingFromType = new Dictionary
+            <Type, Func<DynamoDBEntry, dynamic>>
+        {
+            {typeof (string), value => value.AsString()},
+            {typeof (Guid), value => value.AsGuid()},
+            {typeof (decimal), value => value.AsDecimal()},
+            {typeof (bool), value => value.AsBoolean()},
+            {typeof (int), value => value.AsInt()},
+            {typeof (DateTime), value => value.AsDateTime()},
+            {typeof (IEnumerable<string>), value => value.AsListOfString()}
+        };
 
         public DynamoDbMapper(DynamoDbEntityConfiguration configuration)
         {
@@ -65,18 +76,18 @@ namespace FluentDynamoDb.Mapping
 
         private List<Document> CreateDocumentList(object value, IEnumerable<FieldConfiguration> configuration)
         {
-            return (from object item in (IEnumerable)value select ToDocument(item, configuration)).ToList();
+            return (from object item in (IEnumerable) value select ToDocument(item, configuration)).ToList();
         }
 
         private static bool IsEnumerable(FieldConfiguration field)
         {
-            return field.Type.IsGenericType && field.Type.GetGenericTypeDefinition() == typeof(IEnumerable<>);
+            return field.Type.IsGenericType && field.Type.GetGenericTypeDefinition() == typeof (IEnumerable<>);
         }
 
         public TEntity ToEntity(Document document)
         {
             if (document == null) return null;
-            return (TEntity)ToEntity(document, _configuration.Fields, typeof(TEntity));
+            return (TEntity) ToEntity(document, _configuration.Fields, typeof (TEntity));
         }
 
         private object ToEntity(Document document, IEnumerable<FieldConfiguration> fields, Type type)
@@ -122,24 +133,14 @@ namespace FluentDynamoDb.Mapping
                     }
                     else
                     {
-                        SetPropertyValue(entity, field.PropertyName, MappingFromType[field.Type](document[field.PropertyName]));
+                        SetPropertyValue(entity, field.PropertyName,
+                            MappingFromType[field.Type](document[field.PropertyName]));
                     }
                 }
             }
 
             return entity;
         }
-
-        protected Dictionary<Type, Func<DynamoDBEntry, dynamic>> MappingFromType = new Dictionary<Type, Func<DynamoDBEntry, dynamic>>
-        {
-            { typeof (string), value => value.AsString() },
-            { typeof (Guid), value => value.AsGuid() },
-            { typeof (decimal), value => value.AsDecimal() },
-            { typeof (bool), value => value.AsBoolean() },
-            { typeof (int), value => value.AsInt() },
-            { typeof (DateTime), value => value.AsDateTime() },
-            { typeof (IEnumerable<string>), value => value.AsListOfString() }
-        };
 
         private static void SetPropertyValue(object instance, string propertyName, object value)
         {
@@ -148,9 +149,9 @@ namespace FluentDynamoDb.Mapping
 
         private static IList CreateListOf(Type itemType)
         {
-            var listType = typeof(List<>);
+            var listType = typeof (List<>);
             var constructedListType = listType.MakeGenericType(itemType);
-            return (IList)Activator.CreateInstance(constructedListType);
+            return (IList) Activator.CreateInstance(constructedListType);
         }
     }
 }

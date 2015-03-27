@@ -1,10 +1,10 @@
 using Amazon.DynamoDBv2.DocumentModel;
 using NUnit.Framework;
 
-namespace FluentDynamoDb.Tests.Mapping
+namespace FluentDynamoDb.Tests.Mappers
 {
     [TestFixture]
-    public class DynamoDbMapperWithComplexIncompleteClassToDocumentTests : DynamoDbMapperWithComplexClassBase
+    public class DynamoDbMapperWithComplexCompleteClassToDocumentTests : DynamoDbMapperWithComplexClassBase
     {
         private Document _documentFoo;
 
@@ -18,7 +18,11 @@ namespace FluentDynamoDb.Tests.Mapping
                 FooName = "TheFooName",
                 Bar = new Bar
                 {
-                    BarName = null
+                    BarName = "TheBarName",
+                    Other = new Other
+                    {
+                        OtherName = "TheOtherName"
+                    }
                 }
             };
 
@@ -54,14 +58,30 @@ namespace FluentDynamoDb.Tests.Mapping
         public void ToDocumento_GivenFooComplexClass_InnerDocumentBarBarNameValueShoulBeTheBarName()
         {
             var documentoBar = _documentFoo["Bar"].AsDocument();
-            Assert.AreEqual(null, documentoBar["BarName"].AsString());
+            Assert.AreEqual("TheBarName", documentoBar["BarName"].AsString());
         }
 
         [Test]
-        public void ToDocument_GivenFooComplexClass_InnerDocumentBarShouldNotContainsOtherKey()
+        public void ToDocument_GivenFooComplexClass_InnerDocumentBarShouldContainsOtherKey()
         {
             var documentoBar = _documentFoo["Bar"].AsDocument();
-            Assert.IsFalse(documentoBar.Keys.Contains("Other"));
+            Assert.IsTrue(documentoBar.Keys.Contains("Other"));
+        }
+
+        [Test]
+        public void ToDocument_GivenFooComplexClass_InnerInnerDocumentOtherShouldContainsOtherNameKey()
+        {
+            var documentoBar = _documentFoo["Bar"].AsDocument();
+            var documentOther = documentoBar["Other"].AsDocument();
+            Assert.IsTrue(documentOther.Keys.Contains("OtherName"));
+        }
+
+        [Test]
+        public void ToDocument_GivenFooComplexClass_InnerInnerDocumentOtherOtherNameValueShouldBeTheOtherName()
+        {
+            var documentoBar = _documentFoo["Bar"].AsDocument();
+            var documentOther = documentoBar["Other"].AsDocument();
+            Assert.AreEqual("TheOtherName", documentOther["OtherName"].AsString());
         }
     }
 }

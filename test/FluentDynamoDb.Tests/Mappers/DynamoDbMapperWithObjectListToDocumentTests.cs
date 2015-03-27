@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Amazon.DynamoDBv2.DocumentModel;
 using NUnit.Framework;
 
-namespace FluentDynamoDb.Tests.Mapping
+namespace FluentDynamoDb.Tests.Mappers
 {
     [TestFixture]
     public class DynamoDbMapperWithObjectListToDocumentTests : DynamoDbMapperWithObjectListBase
@@ -19,10 +19,10 @@ namespace FluentDynamoDb.Tests.Mapping
                 FooName = "TheFooName",
                 Bars = new List<Bar>
                 {
-                    new Bar { BarName = "BarName1" },
-                    new Bar { BarName = "BarName2" },
+                    new Bar {BarName = "BarName1"},
+                    new Bar {BarName = "BarName2"}
                 },
-                Other = new Other { OtherName = "TheOtherName" }
+                Other = new Other {OtherName = "TheOtherName"}
             });
         }
 
@@ -54,7 +54,7 @@ namespace FluentDynamoDb.Tests.Mapping
         public void ToDocument_GivenFooClass_BarsCountShouldBe2()
         {
             var documentBars = _document["Bars"].AsListOfDocument();
-            Assert.AreEqual(2, documentBars.Count); 
+            Assert.AreEqual(2, documentBars.Count);
         }
 
         [Test]

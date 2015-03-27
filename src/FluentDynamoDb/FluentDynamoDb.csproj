@@ -44,12 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mapping\ClassMap.cs" />
+    <Compile Include="ClassMap.cs" />
     <Compile Include="Converters\DynamoDbConverterEnum.cs" />
-    <Compile Include="Mapping\Configuration\DynamoDbEntityConfiguration.cs" />
-    <Compile Include="Mapping\Configuration\DynamoDbRootEntityConfiguration.cs" />
-    <Compile Include="Mapping\DynamoDbEntityMapper.cs" />
-    <Compile Include="Mapping\Configuration\FieldConfiguration.cs" />
+    <Compile Include="Mappers\DynamoDbEntityConfiguration.cs" />
+    <Compile Include="Mappers\DynamoDbRootEntityConfiguration.cs" />
+    <Compile Include="Mappers\DynamoDbEntityMapper.cs" />
+    <Compile Include="Mappers\FieldConfiguration.cs" />
     <Compile Include="Exceptions\FluentDynamoDbMappingException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

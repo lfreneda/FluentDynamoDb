@@ -1,10 +1,10 @@
 using Amazon.DynamoDBv2.DocumentModel;
 using NUnit.Framework;
 
-namespace FluentDynamoDb.Tests.Mapping
+namespace FluentDynamoDb.Tests.Mappers
 {
     [TestFixture]
-    public class DynamoDbMapperWithCompleteComplexClassToEntityTests : DynamoDbMapperWithComplexClassBase
+    public class DynamoDbMapperWithIncompleteComplexClassToEntityTests : DynamoDbMapperWithComplexClassBase
     {
         private Foo _foo;
 
@@ -15,11 +15,8 @@ namespace FluentDynamoDb.Tests.Mapping
 
             var documentFoo = new Document();
             documentFoo["FooName"] = "TheFooName";
-            var documentOther = new Document();
-            documentOther["OtherName"] = "TheOtherName";
             var documentBar = new Document();
-            documentBar["BarName"] = "TheBarName";
-            documentBar["Other"] = documentOther;
+            documentBar["BarName"] = null;
             documentFoo["Bar"] = documentBar;
 
             _foo = Mapper.ToEntity(documentFoo);
@@ -46,19 +43,13 @@ namespace FluentDynamoDb.Tests.Mapping
         [Test]
         public void ToEntity_GivenDocumentOfFoo_fooBarBarNameShouldBeTheBarName()
         {
-            Assert.AreEqual("TheBarName", _foo.Bar.BarName);
+            Assert.AreEqual(null, _foo.Bar.BarName);
         }
 
         [Test]
         public void ToEntity_GivenDocumentOfFoo_fooBarOtherShouldNotBeNull()
         {
-            Assert.IsNotNull(_foo.Bar.Other);
-        }
-
-        [Test]
-        public void ToEntity_GivenDocumentOfFoo_fooBarOtherOtherNameShouldBeTheOtherName()
-        {
-            Assert.AreEqual("TheOtherName", _foo.Bar.Other.OtherName);
+            Assert.IsNull(_foo.Bar.Other);
         }
     }
 }

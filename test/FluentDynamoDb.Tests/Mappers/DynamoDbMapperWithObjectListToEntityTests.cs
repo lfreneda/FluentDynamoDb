@@ -3,7 +3,7 @@ using System.Linq;
 using Amazon.DynamoDBv2.DocumentModel;
 using NUnit.Framework;
 
-namespace FluentDynamoDb.Tests.Mapping
+namespace FluentDynamoDb.Tests.Mappers
 {
     [TestFixture]
     public class DynamoDbMapperWithObjectListToEntityTests : DynamoDbMapperWithObjectListBase
@@ -29,7 +29,7 @@ namespace FluentDynamoDb.Tests.Mapping
             var documentBar2 = new Document();
             documentBar2["BarName"] = "BarName2";
 
-            documentFoo["Bars"] = new List<Document> { documentBar1, documentBar2 };
+            documentFoo["Bars"] = new List<Document> {documentBar1, documentBar2};
 
             _foo = Mapper.ToEntity(documentFoo);
         }

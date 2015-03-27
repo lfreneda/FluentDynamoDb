@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using FluentDynamoDb.Exceptions;
-using FluentDynamoDb.Mapping.Configuration;
+using FluentDynamoDb.Mappers;
 using NUnit.Framework;
 
-namespace FluentDynamoDb.Tests.Mapping.Configuration
+namespace FluentDynamoDb.Tests.Mappers
 {
     [TestFixture]
     public class DynamoDbMappingConfigurationTests
@@ -23,14 +23,15 @@ namespace FluentDynamoDb.Tests.Mapping.Configuration
         {
             var dynamoDbEntityConfiguration = new DynamoDbEntityConfiguration();
 
-            dynamoDbEntityConfiguration.AddFieldConfiguration(new FieldConfiguration("FooName", typeof(string)));
+            dynamoDbEntityConfiguration.AddFieldConfiguration(new FieldConfiguration("FooName", typeof (string)));
 
-            Assert.That(() => dynamoDbEntityConfiguration.AddFieldConfiguration(new FieldConfiguration("FooName", typeof(string))),
+            Assert.That(
+                () =>
+                    dynamoDbEntityConfiguration.AddFieldConfiguration(new FieldConfiguration("FooName", typeof (string))),
                 Throws.Exception.TypeOf<FluentDynamoDbMappingException>()
                     .With
                     .Message
                     .EqualTo("Property FooName has already been mapped"));
-
         }
     }
 }

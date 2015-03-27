@@ -1,13 +1,13 @@
-﻿using FluentDynamoDb.Mapping.Configuration;
+﻿using FluentDynamoDb.Mappers;
 using Moq;
 
-namespace FluentDynamoDb.Tests.Mapping
+namespace FluentDynamoDb.Tests
 {
     public class ClassMapBase
     {
+        protected FieldConfiguration CurrentFieldConfiguration;
         protected Mock<DynamoDbEntityConfiguration> DynamoDbMappingConfigurationFake;
         protected DynamoDbRootEntityConfiguration DynamoDbRootEntityConfiguration;
-        protected FieldConfiguration CurrentFieldConfiguration;
 
         public virtual void SetUp()
         {
@@ -15,8 +15,7 @@ namespace FluentDynamoDb.Tests.Mapping
 
             DynamoDbMappingConfigurationFake = new Mock<DynamoDbEntityConfiguration>();
             DynamoDbMappingConfigurationFake.Setup(c => c.AddFieldConfiguration(It.IsAny<FieldConfiguration>()))
-                                             .Callback<FieldConfiguration>(fieldConfiguration => { CurrentFieldConfiguration = fieldConfiguration; });
-
+                .Callback<FieldConfiguration>(fieldConfiguration => { CurrentFieldConfiguration = fieldConfiguration; });
         }
     }
 }
