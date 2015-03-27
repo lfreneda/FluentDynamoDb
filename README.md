@@ -6,7 +6,7 @@
 
 Fluent, POCO friendly, convention-based mappings for DynamoDb. Get your fluent on :-)
 
-See the example to more information.
+See the example for more information.
 
 https://github.com/lfreneda/FluentDynamoDb/tree/master/example/FluentDynamoDb.Example
 
