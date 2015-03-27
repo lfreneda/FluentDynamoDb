@@ -6,13 +6,13 @@ namespace FluentDynamoDb.Tests.Converters
     [TestFixture]
     public class DynamoDbConverterEnumTests
     {
-        private DynamoDbConverterEnum<Foo> _dynamoDbConverterEnum;
-
         public enum Foo
         {
             Option1 = 1,
             Option2 = 2
         }
+
+        private DynamoDbConverterEnum<Foo> _dynamoDbConverterEnum;
 
         [SetUp]
         public void SetUp()

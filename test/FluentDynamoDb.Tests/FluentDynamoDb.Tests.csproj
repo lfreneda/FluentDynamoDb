@@ -54,8 +54,9 @@
     <Compile Include="ClassMapBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ClassMapComplexTypeMissingPublicConstructorClassMapTests.cs" />
-    <Compile Include="ClassMapComplexTypeMissingClassMapTests.cs" />
+    <Compile Include="Mappers\ClassMapLoaderMissingPublicConstructorClassMapTests.cs" />
+    <Compile Include="Mappers\ClassMapLoaderMissingClassMapTests.cs" />
+    <Compile Include="Mappers\ClassMapLoaderTests.cs" />
     <Compile Include="ClassMapTableNameTests.cs" />
     <Compile Include="ClassMapBoolTests.cs">
       <SubType>Code</SubType>
@@ -82,6 +83,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converters\DynamoDbConverterEnumTests.cs" />
+    <Compile Include="DynamoDbStoreBaseTests.cs" />
     <Compile Include="Mappers\DynamoDbMapperWithCompleteComplexClassToEntityTests.cs">
       <SubType>Code</SubType>
     </Compile>

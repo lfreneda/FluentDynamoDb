@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Reflection;
+using FluentDynamoDb.Configuration;
 using FluentDynamoDb.Mappers;
 using NUnit.Framework;
 
@@ -11,6 +13,8 @@ namespace FluentDynamoDb.Tests
         public override void SetUp()
         {
             base.SetUp();
+
+            FluentDynamoDbConfiguration.Configure(Assembly.GetExecutingAssembly());
 
             var fooMap = new FooMap(DynamoDbRootEntityConfiguration, DynamoDbMappingConfigurationFake.Object);
         }

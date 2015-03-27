@@ -1,34 +1,40 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Amazon.DynamoDBv2.DataModel;
-using FluentDynamoDb.Exceptions;
 using FluentDynamoDb.Mappers;
 
 namespace FluentDynamoDb
 {
     public class ClassMap<TEntity>
     {
+        private readonly IClassMapLoader _classMapLoader;
         private readonly DynamoDbEntityConfiguration _dynamoDbEntityConfiguration;
         private readonly DynamoDbRootEntityConfiguration _dynamoDbRootEntityConfiguration;
 
         public ClassMap()
-            : this(new DynamoDbRootEntityConfiguration(), new DynamoDbEntityConfiguration())
+            : this(new DynamoDbRootEntityConfiguration(), new DynamoDbEntityConfiguration(), new ClassMapLoader())
         {
         }
 
         internal ClassMap(DynamoDbRootEntityConfiguration dynamoDbRootEntityConfiguration)
-            : this(dynamoDbRootEntityConfiguration, new DynamoDbEntityConfiguration())
+            : this(dynamoDbRootEntityConfiguration, new DynamoDbEntityConfiguration(), new ClassMapLoader())
         {
         }
 
         internal ClassMap(DynamoDbRootEntityConfiguration dynamoDbRootEntityConfiguration,
             DynamoDbEntityConfiguration dynamoDbEntityConfiguration)
+            : this(dynamoDbRootEntityConfiguration, dynamoDbEntityConfiguration, new ClassMapLoader())
+        {
+        }
+
+        internal ClassMap(DynamoDbRootEntityConfiguration dynamoDbRootEntityConfiguration,
+            DynamoDbEntityConfiguration dynamoDbEntityConfiguration, IClassMapLoader classMapLoader)
         {
             _dynamoDbRootEntityConfiguration = dynamoDbRootEntityConfiguration;
             _dynamoDbEntityConfiguration = dynamoDbEntityConfiguration;
+            _classMapLoader = classMapLoader;
         }
 
         protected void TableName(string tableName)
@@ -71,33 +77,11 @@ namespace FluentDynamoDb
 
         private void CreateComplexFieldConfiguration<TType>(PropertyInfo propertyInfo)
         {
-            var mappingType = GetType()
-                .Assembly.GetTypes()
-                .FirstOrDefault(t => t.IsSubclassOf(typeof (ClassMap<TType>)));
-            if (mappingType == null)
-            {
-                throw new FluentDynamoDbMappingException(string.Format("Could not find mapping for class of type {0}",
-                    propertyInfo.PropertyType));
-            }
-
-            ClassMap<TType> mapping = null;
-
-            try
-            {
-                 mapping = Activator.CreateInstance(mappingType) as ClassMap<TType>;
-                 if (mapping == null)
-                 {
-                     throw new FluentDynamoDbMappingException(string.Format("Could not create a instance of type {0}, class must provide a public constructor", mappingType));
-                 }
-            }
-            catch (MissingMethodException ex)
-            {
-                throw new FluentDynamoDbMappingException(string.Format("Could not create a instance of type {0}, class must provide a public constructor", mappingType), ex);
-            }
+            var classMap = _classMapLoader.Load<TType>();
 
             var fieldConfiguration = new FieldConfiguration(propertyInfo.Name, propertyInfo.PropertyType, true);
 
-            foreach (var innerFieldConfiguration in mapping.GetMappingConfigurationFields())
+            foreach (var innerFieldConfiguration in classMap.GetMappingConfigurationFields())
             {
                 fieldConfiguration.FieldConfigurations.Add(innerFieldConfiguration);
             }
