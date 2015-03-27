@@ -42,15 +42,15 @@ namespace FluentDynamoDb
             _dynamoDbRootEntityConfiguration.TableName = tableName;
         }
 
-        protected void Map<TType>(Expression<Func<TEntity, TType>> propertyExpression,
-            IPropertyConverter propertyConverter = null)
+        protected void Map<TType>(Expression<Func<TEntity, TType>> propertyExpression, IPropertyConverter propertyConverter = null, AccessStrategy accessStrategy = AccessStrategy.Default)
         {
             var propertyInfo = GetPropertyInfo(propertyExpression);
 
             if (propertyInfo != null)
             {
                 var fieldConfiguration = new FieldConfiguration(propertyInfo.Name, propertyInfo.PropertyType, false,
-                    propertyConverter: propertyConverter);
+                                                                propertyConverter: propertyConverter, accessStrategy: accessStrategy);
+
                 _dynamoDbEntityConfiguration.AddFieldConfiguration(fieldConfiguration);
             }
         }
@@ -94,7 +94,7 @@ namespace FluentDynamoDb
             MemberExpression memberExpression = null;
 
             if (propertyExpression.Body.NodeType == ExpressionType.Convert)
-                memberExpression = ((UnaryExpression) propertyExpression.Body).Operand as MemberExpression;
+                memberExpression = ((UnaryExpression)propertyExpression.Body).Operand as MemberExpression;
             else if (propertyExpression.Body.NodeType == ExpressionType.MemberAccess)
                 memberExpression = propertyExpression.Body as MemberExpression;
 

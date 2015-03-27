@@ -7,8 +7,7 @@ namespace FluentDynamoDb
 {
     public class DynamoDbStoreBase
     {
-        private static readonly IDictionary<Type, DynamoDbRootEntityConfiguration> MapConfigurations =
-            new ConcurrentDictionary<Type, DynamoDbRootEntityConfiguration>();
+        private static readonly IDictionary<Type, DynamoDbRootEntityConfiguration> MapConfigurations = new ConcurrentDictionary<Type, DynamoDbRootEntityConfiguration>();
 
         protected readonly IClassMapLoader ClassMapLoader;
 
