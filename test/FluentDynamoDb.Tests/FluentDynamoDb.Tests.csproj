@@ -54,6 +54,8 @@
     <Compile Include="ClassMapBase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ClassMapCollectionWithAccessStrategyTests.cs" />
+    <Compile Include="ClassMapEnumWithPropertyConversorTests.cs" />
     <Compile Include="Extensions\StringExtensionsTests.cs" />
     <Compile Include="Mappers\ClassMapLoaderMissingPublicConstructorClassMapTests.cs" />
     <Compile Include="Mappers\ClassMapLoaderMissingClassMapTests.cs" />

@@ -42,17 +42,18 @@ namespace FluentDynamoDb
             _dynamoDbRootEntityConfiguration.TableName = tableName;
         }
 
-        protected void Map<TType>(Expression<Func<TEntity, TType>> propertyExpression, IPropertyConverter propertyConverter = null, AccessStrategy accessStrategy = AccessStrategy.Default)
+        protected FieldConfiguration Map<TType>(Expression<Func<TEntity, TType>> propertyExpression, IPropertyConverter propertyConverter = null)
         {
             var propertyInfo = GetPropertyInfo(propertyExpression);
 
             if (propertyInfo != null)
             {
-                var fieldConfiguration = new FieldConfiguration(propertyInfo.Name, propertyInfo.PropertyType, false,
-                                                                propertyConverter: propertyConverter, accessStrategy: accessStrategy);
-
+                var fieldConfiguration = new FieldConfiguration(propertyInfo.Name, propertyInfo.PropertyType, false, propertyConverter: propertyConverter);
                 _dynamoDbEntityConfiguration.AddFieldConfiguration(fieldConfiguration);
+                return fieldConfiguration;
             }
+
+            return null; //TODO: Throws exception
         }
 
         protected void References<TType>(Expression<Func<TEntity, TType>> propertyExpression)
@@ -65,17 +66,19 @@ namespace FluentDynamoDb
             }
         }
 
-        protected void HasMany<TType>(Expression<Func<TEntity, IEnumerable<TType>>> propertyExpression)
+        protected FieldConfiguration HasMany<TType>(Expression<Func<TEntity, IEnumerable<TType>>> propertyExpression)
         {
             var propertyInfo = GetPropertyInfo(propertyExpression);
 
             if (propertyInfo != null)
             {
-                CreateComplexFieldConfiguration<TType>(propertyInfo);
+                return CreateComplexFieldConfiguration<TType>(propertyInfo);
             }
+
+            return null; //TODO: Throws exception
         }
 
-        private void CreateComplexFieldConfiguration<TType>(PropertyInfo propertyInfo)
+        private FieldConfiguration CreateComplexFieldConfiguration<TType>(PropertyInfo propertyInfo)
         {
             var classMap = _classMapLoader.Load<TType>();
 
@@ -87,6 +90,8 @@ namespace FluentDynamoDb
             }
 
             _dynamoDbEntityConfiguration.AddFieldConfiguration(fieldConfiguration);
+
+            return fieldConfiguration;
         }
 
         private static PropertyInfo GetPropertyInfo<TType>(Expression<Func<TEntity, TType>> propertyExpression)

@@ -25,6 +25,28 @@ namespace FluentDynamoDb.Mappers
         public ICollection<FieldConfiguration> FieldConfigurations { get; set; }
         public IPropertyConverter PropertyConverter { get; set; }
         public AccessStrategy AccessStrategy { get; set; }
+
+        public FieldConfiguration With(AccessStrategy accessStrategy)
+        {
+            this.AccessStrategy = accessStrategy;
+            return this;
+        }
+
+        public FieldConfiguration With(IPropertyConverter propertyConverter)
+        {
+            this.PropertyConverter = propertyConverter;
+            return this;
+        }
+
+        public FieldConfiguration And(IPropertyConverter propertyConverter)
+        {
+            return With(propertyConverter);
+        }
+
+        public FieldConfiguration And(AccessStrategy accessStrategy)
+        {
+            return With(accessStrategy);
+        }
     }
 
     public enum AccessStrategy
