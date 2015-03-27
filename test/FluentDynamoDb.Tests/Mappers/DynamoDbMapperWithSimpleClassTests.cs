@@ -14,7 +14,7 @@ namespace FluentDynamoDb.Tests.Mappers
         {
             var configuration = new DynamoDbEntityConfiguration();
 
-            configuration.AddFieldConfiguration(new FieldConfiguration("Title", typeof (string)));
+            configuration.AddFieldConfiguration(new FieldConfiguration("Title", typeof(string)));
 
             _mapper = new DynamoDbMapper<Foo>(configuration);
         }
@@ -22,7 +22,7 @@ namespace FluentDynamoDb.Tests.Mappers
         [Test]
         public void ToDocument_GivenFooClass_ShouldConvertToDocument()
         {
-            var document = _mapper.ToDocument(new Foo {Title = "Some title..."});
+            var document = _mapper.ToDocument(new Foo { Title = "Some title..." });
 
             Assert.IsTrue(document.Keys.Contains("Title"));
             Assert.AreEqual("Some title...", document["Title"].AsString());

@@ -49,6 +49,7 @@
     <Compile Include="Converters\DynamoDbConverterEnum.cs" />
     <Compile Include="DynamoDbStore.cs" />
     <Compile Include="DynamoDbStoreBase.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="IDynamoDbStore.cs" />
     <Compile Include="Mappers\ClassMapLoader.cs" />
     <Compile Include="Mappers\DynamoDbEntityConfiguration.cs" />

@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace FluentDynamoDb.Tests.Mappers
 {
-    public class DynamoDbMapperWithObjectListBase
+    public class DynamoDbMapperWithObjectListUsingCamelCaseUnderscoreFieldBase
     {
         protected DynamoDbMapper<Foo> Mapper;
 
@@ -17,7 +17,7 @@ namespace FluentDynamoDb.Tests.Mappers
 
             configuration.AddFieldConfiguration(new FieldConfiguration("Bars", typeof(IEnumerable<Bar>), true, new List<FieldConfiguration> {
                     new FieldConfiguration("BarName", typeof (string))
-                }));
+                }, accessStrategy: AccessStrategy.CamelCaseUnderscoreName));
 
             configuration.AddFieldConfiguration(new FieldConfiguration("Other", typeof(Other), true, new List<FieldConfiguration> {
                     new FieldConfiguration("OtherName", typeof (string))
@@ -29,7 +29,15 @@ namespace FluentDynamoDb.Tests.Mappers
         public class Foo
         {
             public string FooName { get; set; }
-            public IEnumerable<Bar> Bars { get; set; }
+
+            private readonly IList<Bar> _bars = new List<Bar>();
+            public IEnumerable<Bar> Bars { get { return _bars; } }
+
+            public void AddBar(Bar bar)
+            {
+                _bars.Add(bar);
+            }
+
             public Other Other { get; set; }
         }
 

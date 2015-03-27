@@ -54,6 +54,7 @@
     <Compile Include="ClassMapBase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Extensions\StringExtensionsTests.cs" />
     <Compile Include="Mappers\ClassMapLoaderMissingPublicConstructorClassMapTests.cs" />
     <Compile Include="Mappers\ClassMapLoaderMissingClassMapTests.cs" />
     <Compile Include="Mappers\ClassMapLoaderTests.cs" />
@@ -102,6 +103,10 @@
     <Compile Include="Mappers\DynamoDbMapperWithIncompleteComplexClassToEntityTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Mappers\DynamoDbMapperWithObjectListUsingCamelCaseUnderscoreFieldToDocumentTests.cs" />
+    <Compile Include="Mappers\DynamoDbMapperWithObjectListUsingCamelCaseUnderscoreFieldToEntityWithNoBackingFieldTests.cs" />
+    <Compile Include="Mappers\DynamoDbMapperWithObjectListUsingCamelCaseUnderscoreFieldToEntityTests.cs" />
+    <Compile Include="Mappers\DynamoDbMapperWithObjectListUsingCamelCaseUnderscoreFieldBase.cs" />
     <Compile Include="Mappers\DynamoDbMapperWithObjectListBase.cs">
       <SubType>Code</SubType>
     </Compile>

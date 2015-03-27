@@ -2,7 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Amazon.DynamoDBv2.DocumentModel;
+using FluentDynamoDb.Exceptions;
+using FluentDynamoDb.Extensions;
 
 namespace FluentDynamoDb.Mappers
 {
@@ -76,17 +79,17 @@ namespace FluentDynamoDb.Mappers
 
         private List<Document> CreateDocumentList(object value, IEnumerable<FieldConfiguration> configuration)
         {
-            return (from object item in (IEnumerable) value select ToDocument(item, configuration)).ToList();
+            return (from object item in (IEnumerable)value select ToDocument(item, configuration)).ToList();
         }
 
         private static bool IsEnumerable(FieldConfiguration field)
         {
-            return field.Type.IsGenericType && field.Type.GetGenericTypeDefinition() == typeof (IEnumerable<>);
+            return field.Type.IsGenericType && field.Type.GetGenericTypeDefinition() == typeof(IEnumerable<>);
         }
 
         public TEntity ToEntity(Document document)
         {
-            return (TEntity) ToEntity(document, _configuration.Fields, typeof (TEntity));
+            return (TEntity)ToEntity(document, _configuration.Fields, typeof(TEntity));
         }
 
         private object ToEntity(Document document, IEnumerable<FieldConfiguration> fields, Type type)
@@ -115,7 +118,21 @@ namespace FluentDynamoDb.Mappers
                             list.Add(itemValue);
                         }
 
-                        SetPropertyValue(entity, field.PropertyName, list);
+                        if (field.AccessStrategy == AccessStrategy.CamelCaseUnderscoreName)
+                        {
+                            var backingFieldName = field.PropertyName.ConvertToCamelCaseUnderscore();
+                            var backingField = entity.GetType().GetField(backingFieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+                            if (backingField == null)
+                            {
+                                throw new FluentDynamoDbMappingException(string.Format("Could not find backing field named {0} of type {1}", backingFieldName, entity.GetType()));
+                            }
+
+                            backingField.SetValue(entity, list);
+                        }
+                        else
+                        {
+                            SetPropertyValue(entity, field.PropertyName, list);
+                        }
                     }
                     else
                     {
@@ -148,9 +165,9 @@ namespace FluentDynamoDb.Mappers
 
         private static IList CreateListOf(Type itemType)
         {
-            var listType = typeof (List<>);
+            var listType = typeof(List<>);
             var constructedListType = listType.MakeGenericType(itemType);
-            return (IList) Activator.CreateInstance(constructedListType);
+            return (IList)Activator.CreateInstance(constructedListType);
         }
     }
 }
