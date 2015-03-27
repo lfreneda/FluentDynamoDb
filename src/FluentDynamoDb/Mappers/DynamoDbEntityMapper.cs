@@ -86,7 +86,6 @@ namespace FluentDynamoDb.Mappers
 
         public TEntity ToEntity(Document document)
         {
-            if (document == null) return null;
             return (TEntity) ToEntity(document, _configuration.Fields, typeof (TEntity));
         }
 

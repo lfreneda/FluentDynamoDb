@@ -80,11 +80,19 @@ namespace FluentDynamoDb
                     propertyInfo.PropertyType));
             }
 
-            var mapping = Activator.CreateInstance(mappingType) as ClassMap<TType>;
-            if (mapping == null)
+            ClassMap<TType> mapping = null;
+
+            try
             {
-                throw new FluentDynamoDbMappingException(string.Format(
-                    "Could not create mapping for class of type {0}", propertyInfo.PropertyType));
+                 mapping = Activator.CreateInstance(mappingType) as ClassMap<TType>;
+                 if (mapping == null)
+                 {
+                     throw new FluentDynamoDbMappingException(string.Format("Could not create a instance of type {0}, class must provide a public constructor", mappingType));
+                 }
+            }
+            catch (MissingMethodException ex)
+            {
+                throw new FluentDynamoDbMappingException(string.Format("Could not create a instance of type {0}, class must provide a public constructor", mappingType), ex);
             }
 
             var fieldConfiguration = new FieldConfiguration(propertyInfo.Name, propertyInfo.PropertyType, true);

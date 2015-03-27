@@ -8,5 +8,10 @@ namespace FluentDynamoDb.Exceptions
             : base(message)
         {
         }
+
+        public FluentDynamoDbMappingException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
     }
 }
