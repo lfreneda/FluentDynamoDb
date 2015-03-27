@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Amazon.DynamoDBv2.DocumentModel;
+using FluentDynamoDb.Mapping.Configuration;
 
-namespace FluentDynamoDb
+namespace FluentDynamoDb.Mapping
 {
     public class DynamoDbMapper<TEntity>
         where TEntity : class,new()
@@ -21,7 +22,7 @@ namespace FluentDynamoDb
             return ToDocument(entity, _configuration.Fields);
         }
 
-        private Document ToDocument(object entity, IEnumerable<IFieldConfiguration> fields)
+        private Document ToDocument(object entity, IEnumerable<FieldConfiguration> fields)
         {
             var document = new Document();
 
@@ -57,17 +58,17 @@ namespace FluentDynamoDb
             return document;
         }
 
-        private static object GetPropertyValue(object entity, IFieldConfiguration field)
+        private static object GetPropertyValue(object entity, FieldConfiguration field)
         {
             return entity.GetType().GetProperty(field.PropertyName).GetValue(entity, null);
         }
 
-        private List<Document> CreateDocumentList(object value, IEnumerable<IFieldConfiguration> configuration)
+        private List<Document> CreateDocumentList(object value, IEnumerable<FieldConfiguration> configuration)
         {
             return (from object item in (IEnumerable)value select ToDocument(item, configuration)).ToList();
         }
 
-        private static bool IsEnumerable(IFieldConfiguration field)
+        private static bool IsEnumerable(FieldConfiguration field)
         {
             return field.Type.IsGenericType && field.Type.GetGenericTypeDefinition() == typeof(IEnumerable<>);
         }
@@ -78,7 +79,7 @@ namespace FluentDynamoDb
             return (TEntity)ToEntity(document, _configuration.Fields, typeof(TEntity));
         }
 
-        private object ToEntity(Document document, IEnumerable<IFieldConfiguration> fields, Type type)
+        private object ToEntity(Document document, IEnumerable<FieldConfiguration> fields, Type type)
         {
             if (document == null) return null;
 
@@ -135,6 +136,7 @@ namespace FluentDynamoDb
             { typeof (Guid), value => value.AsGuid() },
             { typeof (decimal), value => value.AsDecimal() },
             { typeof (bool), value => value.AsBoolean() },
+            { typeof (int), value => value.AsInt() },
             { typeof (DateTime), value => value.AsDateTime() },
             { typeof (IEnumerable<string>), value => value.AsListOfString() }
         };

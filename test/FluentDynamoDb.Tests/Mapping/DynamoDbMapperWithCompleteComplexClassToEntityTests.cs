@@ -1,7 +1,7 @@
 using Amazon.DynamoDBv2.DocumentModel;
 using NUnit.Framework;
 
-namespace FluentDynamoDb.Tests
+namespace FluentDynamoDb.Tests.Mapping
 {
     [TestFixture]
     public class DynamoDbMapperWithCompleteComplexClassToEntityTests : DynamoDbMapperWithComplexClassBase

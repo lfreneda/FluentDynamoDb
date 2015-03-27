@@ -1,8 +1,10 @@
 using System;
+using FluentDynamoDb.Mapping;
+using FluentDynamoDb.Mapping.Configuration;
 using Moq;
 using NUnit.Framework;
 
-namespace FluentDynamoDb.Tests
+namespace FluentDynamoDb.Tests.Mapping
 {
     [TestFixture]
     public class ClassMapDateTimeTests : ClassMapBase
@@ -31,7 +33,7 @@ namespace FluentDynamoDb.Tests
         [Test]
         public void Map_WhenMappingFooDate_AddFieldConfigurationShouldBeCalled()
         {
-            DynamoDbMappingConfigurationFake.Verify(c => c.AddFieldConfiguration(It.IsAny<IFieldConfiguration>()), Times.Once);
+            DynamoDbMappingConfigurationFake.Verify(c => c.AddFieldConfiguration(It.IsAny<FieldConfiguration>()), Times.Once);
         }
 
         [Test]

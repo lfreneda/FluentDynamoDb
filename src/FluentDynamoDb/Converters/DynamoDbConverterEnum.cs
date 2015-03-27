@@ -2,7 +2,7 @@ using System;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.DynamoDBv2.DocumentModel;
 
-namespace FluentDynamoDb
+namespace FluentDynamoDb.Converters
 {
     public class DynamoDbConverterEnum<TEnum> : IPropertyConverter
     {

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Amazon.DynamoDBv2.DataModel;
+using FluentDynamoDb.Exceptions;
+using FluentDynamoDb.Mapping.Configuration;
 
-namespace FluentDynamoDb
+namespace FluentDynamoDb.Mapping
 {
     public class ClassMap<TEntity>
     {
@@ -17,7 +20,7 @@ namespace FluentDynamoDb
 
         }
 
-        public ClassMap(DynamoDbRootEntityConfiguration dynamoDbRootEntityConfiguration)
+        internal ClassMap(DynamoDbRootEntityConfiguration dynamoDbRootEntityConfiguration)
             : this(dynamoDbRootEntityConfiguration, new DynamoDbEntityConfiguration())
         {
 
@@ -29,13 +32,19 @@ namespace FluentDynamoDb
             _dynamoDbEntityConfiguration = dynamoDbEntityConfiguration;
         }
 
-        protected void Map<TType>(Expression<Func<TEntity, TType>> propertyExpression)
+        protected void TableName(string tableName)
+        {
+            _dynamoDbRootEntityConfiguration.TableName = tableName;
+        }
+
+        protected void Map<TType>(Expression<Func<TEntity, TType>> propertyExpression, IPropertyConverter propertyConverter = null)
         {
             var propertyInfo = GetPropertyInfo(propertyExpression);
 
             if (propertyInfo != null)
             {
-                _dynamoDbEntityConfiguration.AddFieldConfiguration(CreateFieldConfigurationWith(propertyInfo));
+                var fieldConfiguration = new FieldConfiguration(propertyInfo.Name, propertyInfo.PropertyType, false, propertyConverter: propertyConverter);
+                _dynamoDbEntityConfiguration.AddFieldConfiguration(fieldConfiguration);
             }
         }
 
@@ -99,18 +108,19 @@ namespace FluentDynamoDb
             return propertyInfo;
         }
 
-        private static IFieldConfiguration CreateFieldConfigurationWith(PropertyInfo propertyInfo)
-        {
-            return new FieldConfiguration(propertyInfo.Name, propertyInfo.PropertyType);
-        }
-
-        public IEnumerable<IFieldConfiguration> GetMappingConfigurationFields()
+        internal IEnumerable<FieldConfiguration> GetMappingConfigurationFields()
         {
             return _dynamoDbEntityConfiguration.Fields;
         }
 
-        public DynamoDbRootEntityConfiguration GetConfiguration()
+        internal DynamoDbEntityConfiguration GetEntityConfiguration()
         {
+            return _dynamoDbEntityConfiguration;
+        }
+
+        internal DynamoDbRootEntityConfiguration GetRootConfiguration()
+        {
+            _dynamoDbRootEntityConfiguration.DynamoDbEntityConfiguration = GetEntityConfiguration();
             return _dynamoDbRootEntityConfiguration;
         }
     }

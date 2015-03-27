@@ -1,7 +1,9 @@
 ﻿using System.Linq;
+using FluentDynamoDb.Exceptions;
+using FluentDynamoDb.Mapping.Configuration;
 using NUnit.Framework;
 
-namespace FluentDynamoDb.Tests
+namespace FluentDynamoDb.Tests.Mapping.Configuration
 {
     [TestFixture]
     public class DynamoDbMappingConfigurationTests

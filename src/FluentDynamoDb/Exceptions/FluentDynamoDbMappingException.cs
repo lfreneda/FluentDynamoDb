@@ -1,6 +1,6 @@
 using System;
 
-namespace FluentDynamoDb
+namespace FluentDynamoDb.Exceptions
 {
     public class FluentDynamoDbMappingException : ApplicationException
     {

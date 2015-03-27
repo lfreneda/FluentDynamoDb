@@ -1,7 +1,9 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
+using FluentDynamoDb.Mapping;
+using FluentDynamoDb.Mapping.Configuration;
 using NUnit.Framework;
 
-namespace FluentDynamoDb.Tests
+namespace FluentDynamoDb.Tests.Mapping
 {
     [TestFixture]
     public class DynamoDbMapperWithSimpleClassTests
@@ -17,6 +19,7 @@ namespace FluentDynamoDb.Tests
         public void SetUp()
         {
             var configuration = new DynamoDbEntityConfiguration();
+
             configuration.AddFieldConfiguration(new FieldConfiguration("Title", typeof(string)));
 
             _mapper = new DynamoDbMapper<Foo>(configuration);

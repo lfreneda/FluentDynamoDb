@@ -51,26 +51,66 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClassMapBoolTests.cs" />
-    <Compile Include="ClassMapListOfComplexTests.cs" />
-    <Compile Include="ClassMapComplexTypeTests.cs" />
-    <Compile Include="ClassMapDateTimeTests.cs" />
-    <Compile Include="ClassMapDecimalTests.cs" />
-    <Compile Include="ClassMapGuidTests.cs" />
-    <Compile Include="ClassMapIntTests.cs" />
-    <Compile Include="ClassMapStringTests.cs" />
-    <Compile Include="ClassMapBase.cs" />
-    <Compile Include="DynamoDbMappingConfigurationTests.cs" />
-    <Compile Include="DynamoDbMapperWithComplexClassBase.cs" />
-    <Compile Include="DynamoDbMapperWithComplexIncompleteClassToDocumentTests.cs" />
-    <Compile Include="DynamoDbMapperWithComplexCompleteClassToDocumentTests.cs" />
-    <Compile Include="DynamoDbMapperWithCompleteComplexClassToEntityTests.cs" />
-    <Compile Include="DynamoDbMapperWithEnumTests.cs" />
-    <Compile Include="DynamoDbMapperWithIncompleteComplexClassToEntityTests.cs" />
-    <Compile Include="DynamoDbMapperWithObjectListToDocumentTests.cs" />
-    <Compile Include="DynamoDbMapperWithObjectListBase.cs" />
-    <Compile Include="DynamoDbMapperWithObjectListToEntityTests.cs" />
-    <Compile Include="DynamoDbMapperWithSimpleClassTests.cs" />
+    <Compile Include="Mapping\ClassMapBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\ClassMapBoolTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\ClassMapComplexTypeTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\ClassMapDateTimeTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\ClassMapDecimalTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\ClassMapGuidTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\ClassMapIntTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\ClassMapListOfComplexTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\ClassMapStringTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\DynamoDbMapperWithCompleteComplexClassToEntityTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\DynamoDbMapperWithComplexClassBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\DynamoDbMapperWithComplexCompleteClassToDocumentTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\DynamoDbMapperWithComplexIncompleteClassToDocumentTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\DynamoDbMapperWithEnumTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\DynamoDbMapperWithIncompleteComplexClassToEntityTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\DynamoDbMapperWithObjectListBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\DynamoDbMapperWithObjectListToDocumentTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\DynamoDbMapperWithObjectListToEntityTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\DynamoDbMapperWithSimpleClassTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Mapping\Configuration\DynamoDbMappingConfigurationTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FluentDynamoDb.Mapping;
+using FluentDynamoDb.Mapping.Configuration;
 using NUnit.Framework;
 
-namespace FluentDynamoDb.Tests
+namespace FluentDynamoDb.Tests.Mapping
 {
     [TestFixture]
     public class ClassMapListOfComplexTests : ClassMapBase

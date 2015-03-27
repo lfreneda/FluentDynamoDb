@@ -1,7 +1,10 @@
 ﻿using Amazon.DynamoDBv2.DocumentModel;
+using FluentDynamoDb.Converters;
+using FluentDynamoDb.Mapping;
+using FluentDynamoDb.Mapping.Configuration;
 using NUnit.Framework;
 
-namespace FluentDynamoDb.Tests
+namespace FluentDynamoDb.Tests.Mapping
 {
     [TestFixture]
     public class DynamoDbMappeirWithEnumTests
