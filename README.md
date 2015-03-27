@@ -1,6 +1,8 @@
 # FluentDynamoDb
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ftrev4imfudu0bjj?svg=true)](https://ci.appveyor.com/project/lfreneda/fluentdynamodb)
+[![Nuget version](https://img.shields.io/nuget/v/FluentDynamoDb.svg)](https://www.nuget.org/packages/FluentDynamoDb/)
+[![Nuget downloads](https://img.shields.io/nuget/dt/FluentDynamoDb.svg)](https://www.nuget.org/packages/FluentDynamoDb/)
 
 Fluent, POCO friendly, convention-based mappings for DynamoDb. Get your fluent on :-)
 
