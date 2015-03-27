@@ -14,6 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{73FC61
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{1A0B2DA3-720E-45CC-A5BE-5C18D5511EA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentDynamoDb.Example", "example\FluentDynamoDb.Example\FluentDynamoDb.Example.csproj", "{4EF677E8-A8B2-4F36-B6A3-FEDCB995BA80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,8 +32,15 @@ Global
 		{01690CDD-B273-4E02-8DF2-E379AEEAE963}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01690CDD-B273-4E02-8DF2-E379AEEAE963}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01690CDD-B273-4E02-8DF2-E379AEEAE963}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EF677E8-A8B2-4F36-B6A3-FEDCB995BA80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EF677E8-A8B2-4F36-B6A3-FEDCB995BA80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EF677E8-A8B2-4F36-B6A3-FEDCB995BA80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EF677E8-A8B2-4F36-B6A3-FEDCB995BA80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4EF677E8-A8B2-4F36-B6A3-FEDCB995BA80} = {1A0B2DA3-720E-45CC-A5BE-5C18D5511EA0}
 	EndGlobalSection
 EndGlobal
