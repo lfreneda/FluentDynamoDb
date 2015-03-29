@@ -23,17 +23,6 @@ namespace FluentDynamoDb.Example
         {
             _accounts.Add(account);
         }
-
-        public override string ToString()
-        {
-            var accountsSb = new StringBuilder();
-            foreach (var account in _accounts)
-            {
-                accountsSb.Append(account);
-            }
-
-            return string.Format("Id: {0}, Name: {1}, BirthDate: {2}, Gender: {3}, Contact: {4}, Accounts: {5}", Id, Name, BirthDate, Gender, Contact, accountsSb);
-        }
     }
 
     public class Account
@@ -41,22 +30,12 @@ namespace FluentDynamoDb.Example
         public string Username { get; set; }
         public string Password { get; set; }
         public decimal Balance { get; set; }
-
-        public override string ToString()
-        {
-            return string.Format("Username: {0}, Password: {1}, Balance: {2}", Username, Password, Balance);
-        }
     }
 
     public class Contact
     {
         public string Email { get; set; }
         public int PhoneNumber { get; set; }
-
-        public override string ToString()
-        {
-            return string.Format("Email: {0}, PhoneNumber: {1}", Email, PhoneNumber);
-        }
     }
 
     public class UserMap : ClassMap<User>
@@ -140,13 +119,9 @@ namespace FluentDynamoDb.Example
             userStore.PutItem(user);
 
             var savedUser = userStore.GetItem(new Guid("1a9f6ee7-d0bf-47ab-a6f6-6225ebe713d8"));
-            Console.WriteLine(savedUser);
 
             savedUser.Name = "Luiz Freneda Perez Junior";
             userStore.UpdateItem(savedUser);
-
-            savedUser = userStore.GetItem(new Guid("1a9f6ee7-d0bf-47ab-a6f6-6225ebe713d8"));
-            Console.WriteLine(savedUser);
 
             userStore.DeleteItem(new Guid("1a9f6ee7-d0bf-47ab-a6f6-6225ebe713d8"));
 
