@@ -98,7 +98,7 @@ namespace FluentDynamoDb.Example
 
             FluentDynamoDbConfiguration.Configure(Assembly.GetExecutingAssembly());
 
-            var userStore = new DynamoDbStore<User>();
+            var userStore = new DynamoDbStore<User, Guid>();
 
             var user = new User
             {

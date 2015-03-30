@@ -2,12 +2,12 @@
 
 namespace FluentDynamoDb
 {
-    public interface IDynamoDbStore<TEntity> : IDisposable
+    public interface IDynamoDbStore<TEntity, in TKey> : IDisposable
         where TEntity : class, new()
     {
-        TEntity GetItem(Guid id);
+        TEntity GetItem(TKey id);
         void PutItem(TEntity entity);
         TEntity UpdateItem(TEntity entity);
-        TEntity DeleteItem(Guid id);
+        TEntity DeleteItem(TKey id);
     }
 }

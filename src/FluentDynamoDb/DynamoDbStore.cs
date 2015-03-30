@@ -1,11 +1,10 @@
-﻿using System;
-using Amazon.DynamoDBv2;
+﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using FluentDynamoDb.Mappers;
 
 namespace FluentDynamoDb
 {
-    public class DynamoDbStore<TEntity> : DynamoDbStoreBase, IDynamoDbStore<TEntity>
+    public class DynamoDbStore<TEntity, TKey> : DynamoDbStoreBase, IDynamoDbStore<TEntity, TKey>
         where TEntity : class, new()
     {
         private readonly IAmazonDynamoDB _amazonDynamoDbClient;
@@ -21,10 +20,22 @@ namespace FluentDynamoDb
             _mapper = new DynamoDbMapper<TEntity>(rootConfiguration.DynamoDbEntityConfiguration);
         }
 
-        public TEntity GetItem(Guid id)
+        public TEntity GetItem(TKey id)
         {
-            var document = _entityTable.GetItem(id);
+            dynamic idValue = id;
+            var document = _entityTable.GetItem(idValue);
             return _mapper.ToEntity(document);
+        }
+
+        public TEntity DeleteItem(TKey id)
+        {
+            dynamic idValue = id;
+            var deletedDocument = _entityTable.DeleteItem(idValue, new DeleteItemOperationConfig
+            {
+                ReturnValues = ReturnValues.AllOldAttributes
+            });
+
+            return _mapper.ToEntity(deletedDocument);
         }
 
         public TEntity UpdateItem(TEntity entity)
@@ -42,16 +53,6 @@ namespace FluentDynamoDb
         public void PutItem(TEntity entity)
         {
             _entityTable.PutItem(_mapper.ToDocument(entity));
-        }
-
-        public TEntity DeleteItem(Guid id)
-        {
-            var deletedDocument = _entityTable.DeleteItem(id, new DeleteItemOperationConfig
-            {
-                ReturnValues = ReturnValues.AllOldAttributes
-            });
-
-            return _mapper.ToEntity(deletedDocument);
         }
 
         public void Dispose()
