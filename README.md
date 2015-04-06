@@ -8,6 +8,6 @@ Fluent, POCO friendly, convention-based mappings for DynamoDb. Get your fluent o
 
 See the example for more information.
 
-https://github.com/lfreneda/FluentDynamoDb/tree/master/example/FluentDynamoDb.Example
+https://github.com/lfreneda/FluentDynamoDb/blob/master/example/FluentDynamoDb.Example/Program.cs
 
 I will be writing a better README pretty soon. Hope it could be helpful :)
